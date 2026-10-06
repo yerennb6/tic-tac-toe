@@ -59,18 +59,18 @@
         .mode-switch {
             display: flex;
             justify-content: center;
-            gap: 6px;
+            gap: 8px;
             margin-bottom: 14px;
             flex-wrap: wrap;
         }
 
         .mode-btn {
-            padding: 8px 16px;
+            padding: 8px 22px;
             border-radius: 40px;
             border: none;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             font-weight: 600;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             color: rgba(200, 215, 235, 0.6);
             background: rgba(255, 255, 255, 0.04);
             backdrop-filter: blur(10px);
@@ -95,6 +95,11 @@
             box-shadow:
                 0 0 18px rgba(100, 150, 255, 0.2),
                 inset 0 0 0 0.5px rgba(140, 180, 255, 0.3);
+        }
+
+        .mode-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
         }
 
         .status {
@@ -276,7 +281,7 @@
             h1 { font-size: 1.3rem; letter-spacing: 3px; }
             .cell { font-size: 2.2rem; border-radius: 16px; }
             .board { gap: 8px; }
-            .mode-btn { padding: 7px 12px; font-size: 0.72rem; }
+            .mode-btn { padding: 7px 16px; font-size: 0.78rem; }
             .btn { padding: 9px 20px; font-size: 0.8rem; }
             .room-code-display { font-size: 1.6rem; letter-spacing: 6px; }
         }
@@ -285,16 +290,15 @@
 <body>
     <div class="game-container">
         <h1>井字棋</h1>
-        <div class="rule-tip" id="ruleTip">✦ 每人下满三个悔一个 · 三连获胜 ✦</div>
+        <div class="rule-tip">✦ 每人下满三个悔一个 · 三连获胜 ✦</div>
 
-        <!-- 模式切换 -->
+        <!-- 模式切换（只有人机和联机） -->
         <div class="mode-switch" id="modeSwitch">
             <button class="mode-btn active" data-mode="ai">人机对战</button>
-            <button class="mode-btn" data-mode="local">本地双人</button>
             <button class="mode-btn" data-mode="online">联机对战</button>
         </div>
 
-        <!-- 房间面板（联机模式显示） -->
+        <!-- 房间面板 -->
         <div class="room-panel" id="roomPanel">
             <div class="room-actions" id="roomActions">
                 <button class="btn" id="createRoomBtn">创建房间</button>
@@ -333,14 +337,13 @@
         </div>
     </div>
 
-    <!-- Firebase SDK (兼容模式，方便纯 HTML 使用) -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
     <script>
         /* ============================================================
-           1. Firebase 配置 — 必须替换成你自己的！
-           在 Firebase 控制台 → 项目设置 → 你的应用 → 配置 里复制
+           1. Firebase 配置 — 替换成你自己的！
            ============================================================ */
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
@@ -352,18 +355,19 @@
             appId: "YOUR_APP_ID"
         };
 
-        // 初始化 Firebase（即使没配置也不会崩，只是联机功能不可用）
+        // 判断 Firebase 是否已配置
+        const firebaseConfigured = firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY";
+
         let db = null;
         let firebaseReady = false;
         try {
-            if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY") {
-                firebase.app().delete();
+            if (firebaseConfigured) {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.database();
+                firebaseReady = true;
             }
-            firebase.initializeApp(firebaseConfig);
-            db = firebase.database();
-            firebaseReady = true;
         } catch (e) {
-            console.warn('Firebase 未配置，联机模式不可用。', e);
+            console.warn('Firebase 初始化失败：', e);
         }
 
         /* ============================================================
@@ -389,27 +393,24 @@
             [0,4,8], [2,4,6]
         ];
 
-        // 游戏状态
         let board = Array(9).fill('');
         let currentPlayer = 'X';
         let gameOver = false;
-        let mode = 'ai'; // 'ai' | 'local' | 'online'
+        let mode = 'ai'; // 'ai' | 'online'
         let isAiThinking = false;
         let scoreX = 0, scoreO = 0;
 
-        // 每个玩家的落子历史（下三悔一）
         let historyX = [];
         let historyO = [];
 
-        // 自动重开定时器
         let autoRestartTimer = null;
 
-        // 联机相关
-        let myRole = null;          // 'X' 或 'O'
-        let myRoomCode = null;      // 房间码
-        let roomRef = null;         // Firebase 引用
-        let roomListener = null;    // 监听器
-        let isHost = false;         // 是否是房主
+        // 联机状态
+        let myRole = null;
+        let myRoomCode = null;
+        let roomRef = null;
+        let roomListener = null;
+        let isHost = false;
 
         /* ============================================================
            3. 工具函数
@@ -422,11 +423,9 @@
         function updateCellStates() {
             cells.forEach((cell, i) => {
                 cell.classList.remove('disabled');
-                // AI 模式：AI 思考时禁用所有空格
                 if (mode === 'ai' && currentPlayer === 'O' && !gameOver) {
                     if (board[i] === '') cell.classList.add('disabled');
                 }
-                // 联机模式：不是我的回合，或游戏结束，禁用所有空格
                 if (mode === 'online') {
                     if (gameOver) {
                         cell.classList.add('disabled');
@@ -434,7 +433,6 @@
                         if (board[i] === '') cell.classList.add('disabled');
                     }
                 }
-                // AI 思考中
                 if (isAiThinking && board[i] === '') {
                     cell.classList.add('disabled');
                 }
@@ -451,9 +449,6 @@
             return null;
         }
 
-        /* ============================================================
-           4. 渲染棋盘（从 board 数组同步到界面）
-           ============================================================ */
         function renderBoard() {
             cells.forEach((cell, i) => {
                 const v = board[i];
@@ -465,7 +460,6 @@
                     cell.className = 'cell';
                 }
             });
-            // 高亮获胜
             const result = checkWinner(board);
             if (result) {
                 result.line.forEach(i => cells[i].classList.add('win'));
@@ -474,7 +468,7 @@
         }
 
         /* ============================================================
-           5. 初始化游戏
+           4. 初始化
            ============================================================ */
         function initGame(skipNetwork) {
             if (autoRestartTimer) {
@@ -493,8 +487,6 @@
 
             if (mode === 'ai') {
                 updateStatus('玩家 X 的回合', '');
-            } else if (mode === 'local') {
-                updateStatus('玩家 X 的回合', '');
             } else if (mode === 'online') {
                 if (myRole) {
                     updateStatus(`你是 ${myRole} · ${currentPlayer === myRole ? '你的回合' : '等待对方…'}`, '');
@@ -503,7 +495,6 @@
                 }
             }
 
-            // 联机模式：如果我是房主，把初始状态写进 Firebase
             if (mode === 'online' && !skipNetwork && isHost && roomRef) {
                 roomRef.update({
                     board: board,
@@ -517,12 +508,11 @@
         }
 
         /* ============================================================
-           6. 落子逻辑（下三悔一）
+           5. 落子（下三悔一）
            ============================================================ */
         function placeMark(index, player) {
             const myHistory = player === 'X' ? historyX : historyO;
 
-            // 下满三个，移除最早的（同步）
             if (myHistory.length >= 3) {
                 const oldestIndex = myHistory.shift();
                 board[oldestIndex] = '';
@@ -541,7 +531,7 @@
         }
 
         /* ============================================================
-           7. 结束游戏（带自动重开）
+           6. 结束游戏
            ============================================================ */
         function endGame(result) {
             gameOver = true;
@@ -564,7 +554,6 @@
             result.line.forEach(i => cells[i].classList.add('win'));
             updateCellStates();
 
-            // 联机模式：把结果同步到 Firebase
             if (mode === 'online' && roomRef) {
                 roomRef.update({
                     board: board,
@@ -576,11 +565,9 @@
                 });
             }
 
-            // 自动重开（联机模式下由房主触发）
             if (mode !== 'online' || isHost) {
                 autoRestartTimer = setTimeout(() => {
                     if (mode === 'online') {
-                        // 房主重置 Firebase 状态，所有客户端自动同步
                         roomRef.update({
                             board: Array(9).fill(''),
                             currentPlayer: 'X',
@@ -597,7 +584,7 @@
         }
 
         /* ============================================================
-           8. 玩家点击
+           7. 玩家点击
            ============================================================ */
         function handleClick(e) {
             const cell = e.currentTarget;
@@ -607,13 +594,11 @@
             if (board[index] !== '') return;
             if (isAiThinking) return;
 
-            // 联机模式：不是我的回合不能下
             if (mode === 'online') {
                 if (!myRole) return;
                 if (currentPlayer !== myRole) return;
             }
 
-            // AI 模式：AI 的回合不能下
             if (mode === 'ai' && currentPlayer === 'O') return;
 
             const player = currentPlayer;
@@ -639,7 +624,6 @@
 
             currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
 
-            // 联机模式：同步到 Firebase
             if (mode === 'online') {
                 roomRef.update({
                     board: board,
@@ -649,7 +633,6 @@
                     winLine: null,
                     lastUpdate: Date.now()
                 });
-                // 状态栏更新
                 if (!willRemove) {
                     updateStatus(currentPlayer === myRole ? '你的回合' : '等待对方…', '');
                 }
@@ -657,7 +640,6 @@
                 return;
             }
 
-            // AI 模式
             if (mode === 'ai' && currentPlayer === 'O') {
                 isAiThinking = true;
                 updateStatus('AI 思考中…', 'thinking');
@@ -672,7 +654,7 @@
         }
 
         /* ============================================================
-           9. AI 落子（Minimax）
+           8. AI 落子（Minimax）
            ============================================================ */
         function aiMove() {
             if (gameOver) { isAiThinking = false; return; }
@@ -774,36 +756,38 @@
         }
 
         /* ============================================================
-           10. 模式切换
+           9. 模式切换
            ============================================================ */
         function setMode(newMode) {
             mode = newMode;
             modeBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.mode === mode));
 
-            // 显示/隐藏房间面板
             roomPanel.classList.toggle('active', mode === 'online');
 
-            // 离开房间（如果之前在房间里）
             if (mode !== 'online' && roomRef) {
                 leaveRoom();
             }
 
-            // 重置房间 UI
             if (mode === 'online') {
                 roomActions.style.display = 'flex';
                 roomInputRow.style.display = 'none';
                 roomInfo.style.display = 'none';
-                updateStatus('请创建或加入房间', '');
+
+                if (!firebaseReady) {
+                    updateStatus('联机模式需要 Firebase，请先配置', 'error');
+                } else {
+                    updateStatus('请创建或加入房间', '');
+                }
             } else {
                 initGame();
             }
         }
 
         /* ============================================================
-           11. 联机：生成房间码
+           10. 联机：生成房间码
            ============================================================ */
         function generateRoomCode() {
-            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // 去掉了容易混淆的 0O1I
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
             let code = '';
             for (let i = 0; i < 6; i++) {
                 code += chars[Math.floor(Math.random() * chars.length)];
@@ -812,11 +796,11 @@
         }
 
         /* ============================================================
-           12. 联机：创建房间
+           11. 联机：创建房间
            ============================================================ */
         function createRoom() {
             if (!firebaseReady) {
-                updateStatus('Firebase 未配置，无法联机', 'error');
+                updateStatus('联机需要 Firebase，请先在代码里配置', 'error');
                 return;
             }
 
@@ -827,15 +811,12 @@
 
             roomRef = db.ref('rooms/' + code);
 
-            // 先检查是否已存在（碰撞概率极低，但保险）
             roomRef.once('value', (snap) => {
                 if (snap.exists()) {
-                    // 重新生成
                     createRoom();
                     return;
                 }
 
-                // 创建房间
                 roomRef.set({
                     board: Array(9).fill(''),
                     currentPlayer: 'X',
@@ -846,24 +827,25 @@
                     lastUpdate: Date.now(),
                     players: { X: true, O: false }
                 }).then(() => {
-                    // 显示房间信息
                     roomActions.style.display = 'none';
                     roomInfo.style.display = 'block';
                     roomCodeDisplay.textContent = code;
                     roomHint.textContent = '等待对方加入…（点击房间码复制）';
                     updateStatus(`你是 X · 等待对方加入`, '');
-                    initGame(true); // 跳过网络写入
+                    initGame(true);
                     listenToRoom();
+                }).catch(err => {
+                    updateStatus('创建房间失败：' + err.message, 'error');
                 });
             });
         }
 
         /* ============================================================
-           13. 联机：加入房间
+           12. 联机：加入房间
            ============================================================ */
         function joinRoom(code) {
             if (!firebaseReady) {
-                updateStatus('Firebase 未配置，无法联机', 'error');
+                updateStatus('联机需要 Firebase，请先在代码里配置', 'error');
                 return;
             }
 
@@ -882,13 +864,11 @@
                 }
 
                 const data = snap.val();
-                // 检查是否已有两个玩家
                 if (data.players && data.players.O) {
                     updateStatus('房间已满', 'error');
                     return;
                 }
 
-                // 加入房间，成为 O
                 myRoomCode = code;
                 myRole = 'O';
                 isHost = false;
@@ -904,7 +884,6 @@
                     roomHint.textContent = '已加入房间 · 你是 O';
                     updateStatus('你是 O · 等待对方下棋', '');
 
-                    // 从 Firebase 读取当前棋盘
                     roomRef.once('value', (s) => {
                         const d = s.val();
                         if (d) {
@@ -924,12 +903,11 @@
         }
 
         /* ============================================================
-           14. 联机：监听房间变化
+           13. 联机：监听房间
            ============================================================ */
         function listenToRoom() {
             if (!roomRef) return;
 
-            // 移除旧的监听器
             if (roomListener) {
                 roomRef.off('value', roomListener);
             }
@@ -938,14 +916,12 @@
                 const data = snap.val();
                 if (!data) return;
 
-                // 同步棋盘
                 const newBoard = data.board || Array(9).fill('');
                 const newCurrentPlayer = data.currentPlayer || 'X';
                 const newGameOver = data.gameOver || false;
                 const newWinner = data.winner || null;
                 const newWinLine = data.winLine || null;
 
-                // 只在数据真正变化时更新（避免自己触发的更新导致闪烁）
                 const boardChanged = JSON.stringify(newBoard) !== JSON.stringify(board);
                 const playerChanged = newCurrentPlayer !== currentPlayer;
                 const gameOverChanged = newGameOver !== gameOver;
@@ -958,17 +934,14 @@
                     renderBoard();
 
                     if (newGameOver && newWinner) {
-                        // 游戏结束
                         const winnerName = newWinner === myRole ? '你' : '对方';
                         updateStatus(`${winnerName}（${newWinner}）获胜！`, 'win');
                         if (newWinLine) {
                             newWinLine.forEach(i => cells[i].classList.add('win'));
                         }
-                        // 比分（本地记录）
                         if (newWinner === 'X') { scoreX++; scoreXEl.textContent = scoreX; }
                         else { scoreO++; scoreOEl.textContent = scoreO; }
                     } else {
-                        // 游戏中
                         if (newCurrentPlayer === myRole) {
                             updateStatus('你的回合', '');
                         } else {
@@ -978,7 +951,6 @@
                     updateCellStates();
                 }
 
-                // 检查对方是否已加入 / 离开
                 if (data.players) {
                     if (isHost && data.players.O) {
                         roomHint.textContent = '对方已加入 · 对战开始';
@@ -988,12 +960,10 @@
         }
 
         /* ============================================================
-           15. 联机：离开房间
+           14. 联机：离开房间
            ============================================================ */
         function leaveRoom() {
             if (roomRef) {
-                // 房主离开：删除整个房间
-                // 非房主离开：把 O 标记为 false
                 if (isHost) {
                     roomRef.remove();
                 } else {
@@ -1018,9 +988,10 @@
         }
 
         /* ============================================================
-           16. 事件绑定
+           15. 事件绑定
            ============================================================ */
         cells.forEach(cell => cell.addEventListener('click', handleClick));
+
         restartBtn.addEventListener('click', () => {
             if (mode === 'online') {
                 if (isHost && roomRef) {
@@ -1033,7 +1004,6 @@
                         lastUpdate: Date.now()
                     });
                 }
-                // 非房主点击无效
             } else {
                 initGame();
             }
@@ -1043,10 +1013,8 @@
             btn.addEventListener('click', () => setMode(btn.dataset.mode));
         });
 
-        // 创建房间
         document.getElementById('createRoomBtn').addEventListener('click', createRoom);
 
-        // 加入房间
         document.getElementById('joinRoomBtn').addEventListener('click', () => {
             roomActions.style.display = 'none';
             roomInputRow.style.display = 'flex';
@@ -1061,7 +1029,6 @@
             if (e.key === 'Enter') joinRoom(roomCodeInput.value);
         });
 
-        // 点击房间码复制
         roomCodeDisplay.addEventListener('click', () => {
             if (myRoomCode) {
                 navigator.clipboard.writeText(myRoomCode).then(() => {
@@ -1069,7 +1036,6 @@
                     roomHint.textContent = '✓ 已复制到剪贴板';
                     setTimeout(() => { roomHint.textContent = old; }, 1500);
                 }).catch(() => {
-                    // 兼容旧浏览器
                     const ta = document.createElement('textarea');
                     ta.value = myRoomCode;
                     document.body.appendChild(ta);
@@ -1083,19 +1049,12 @@
             }
         });
 
-        // 离开房间
         document.getElementById('leaveRoomBtn').addEventListener('click', leaveRoom);
 
         /* ============================================================
-           17. 启动
+           16. 启动
            ============================================================ */
-        if (!firebaseReady) {
-            // Firebase 未配置时，禁用联机模式
-            document.querySelector('[data-mode="online"]').style.opacity = '0.4';
-            document.querySelector('[data-mode="online"]').title = '需要先在代码中配置 Firebase';
-        }
-
         initGame();
-        </script>
+    </script>
 </body>
 </html>
