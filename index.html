@@ -76,12 +76,13 @@
         .cell-5 .stone.white { background: radial-gradient(circle at 35% 35%, #fff, #bbb); box-shadow: 0 1px 3px rgba(0,0,0,0.4); }
         .cell-5.last-move { box-shadow: inset 0 0 0 2px rgba(255,200,0,0.8); }
 
+        /* 跳棋 —— 修复点击 */
         .board-checkers { display: grid; grid-template-columns: repeat(8, 1fr); width: min(88vw, 340px); margin: 0 auto 12px; background: #3a2a1a; border-radius: 8px; padding: 6px; gap: 2px; }
-        .cell-check { aspect-ratio: 1/1; display: flex; justify-content: center; align-items: center; position: relative; border-radius: 4px; cursor: pointer; }
+        .cell-check { aspect-ratio: 1/1; display: flex; justify-content: center; align-items: center; position: relative; border-radius: 4px; cursor: pointer; z-index: 1; }
         .cell-check.light { background: #e8d8b0; }
-        .cell-check.dark { background: #8b5a2b; cursor: pointer; }
+        .cell-check.dark { background: #8b5a2b; }
         .cell-check.dark:hover { background: #a06a35; }
-        .cell-check .piece { width: 78%; height: 78%; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.4), inset 0 -2px 4px rgba(0,0,0,0.3); pointer-events: none; }
+        .cell-check .piece { width: 78%; height: 78%; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.4), inset 0 -2px 4px rgba(0,0,0,0.3); pointer-events: none; display: flex; justify-content: center; align-items: center; }
         .cell-check .piece.red { background: radial-gradient(circle at 35% 30%, #ff6b6b, #b30000); }
         .cell-check .piece.black { background: radial-gradient(circle at 35% 30%, #666, #000); }
         .cell-check .piece.king::after { content: '♛'; position: absolute; color: gold; font-size: 1rem; text-shadow: 0 1px 2px rgba(0,0,0,0.6); }
@@ -115,7 +116,6 @@
         .btn:hover { background: rgba(255,255,255,0.2); }
         .btn:active { transform: scale(0.96); }
         .btn:disabled { opacity: 0.4; cursor: not-allowed; }
-        .btn.gold { background: linear-gradient(135deg, #ffb700, #ff6b00); border-color: #ffd700; box-shadow: 0 0 16px rgba(255, 180, 0, 0.5); }
 
         .room-panel { display: none; flex-direction: column; gap: 8px; }
         .room-panel.active { display: flex; }
@@ -127,11 +127,11 @@
         .room-input-row { display: flex; gap: 8px; justify-content: center; }
         .hidden { display: none !important; }
 
-        /* 弹窗（卡密 / 作者选边） */
+        /* 弹窗 */
         .modal-overlay {
             display: none;
             position: fixed;
-            inset: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.75);
             z-index: 10000;
             justify-content: center;
@@ -140,7 +140,7 @@
             backdrop-filter: blur(6px);
             -webkit-backdrop-filter: blur(6px);
         }
-        .modal-overlay.active { display: flex; }
+        .modal-overlay.active { display: flex !important; }
         .modal {
             background: #1a1f2b;
             border: 1px solid rgba(255,255,255,0.15);
@@ -187,7 +187,6 @@
         .modal .modal-btns .btn-confirm { background: linear-gradient(135deg, #ffb700, #ff6b00); color: #fff; }
         .modal .modal-btns button:active { transform: scale(0.95); }
 
-        /* 胜利动画 */
         .board-area.win-glow { animation: winGlow 1.2s ease-in-out infinite alternate; }
         @keyframes winGlow {
             0% { filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.5)); }
@@ -304,7 +303,6 @@
         </div>
     </div>
 
-    <!-- 卡密输入弹窗 -->
     <div class="modal-overlay" id="keyModal">
         <div class="modal">
             <h3>🔑 输入卡密</h3>
@@ -317,7 +315,6 @@
         </div>
     </div>
 
-    <!-- 作者模式选边弹窗 -->
     <div class="modal-overlay" id="authorModal">
         <div class="modal">
             <h3>🎮 作者模式</h3>
@@ -378,16 +375,12 @@
         const keyInput = document.getElementById('keyInput');
         const authorModal = document.getElementById('authorModal');
 
-        // 卡密
-        const SECRET_KEY = 'xingmonb';
+        const SECRET_KEY = 'qingshuinb';
         let unlocked = false;
-        // 作者模式：AI 执哪边（'X' 或 'O'）
         let authorSide = 'X';
 
         try {
-            if (localStorage.getItem('chessUnlocked') === '1') {
-                unlocked = true;
-            }
+            if (localStorage.getItem('chessUnlocked') === '1') unlocked = true;
         } catch(e) {}
 
         let gameType = 'ttt';
@@ -607,18 +600,16 @@
             if (mode === 'ai') updateStatus('黑棋（X）先手', '');
             else if (mode === 'author') {
                 updateStatus(`作者模式 · AI 执${authorSide === 'X' ? '黑' : '白'}`, 'gold');
-                // 如果 AI 执黑，AI 先下
                 if (authorSide === 'X') setTimeout(authorMove, 400);
             }
             else if (mode === 'online') {
                 if (myRole) updateStatus(`你是 ${myRole === 'X' ? '黑棋' : '白棋'} · ${currentPlayer === myRole ? '你的回合' : '等待对方…'}`, '');
                 else updateStatus('请创建或加入房间', '');
             }
-            if (mode === 'online' && !skipNetwork && isHost && roomRef) syncRoom();
+            if (roomRef && isHost) syncRoom();
         }
-        // 玩家能点的颜色（作者模式下要排除 AI 的颜色）
         function playerCanClick(player) {
-            if (mode === 'author' && player === authorSide) return false;
+            if ((mode === 'author' || (mode === 'online' && roomRef)) && player === authorSide && !gameOver) return false;
             return true;
         }
         function handleCellClick3(index) {
@@ -661,14 +652,19 @@
             if (mode === 'online') { if (!myRole || currentPlayer !== myRole) return; }
             if (mode === 'ai' && currentPlayer === 'O') return;
             if (!playerCanClick(currentPlayer)) return;
+
             const p = boardCheckers[index];
             const myColor = currentPlayer === 'X' ? 'black' : 'red';
+
+            // 点击自己的棋子：选中
             if (p && p.color === myColor) {
                 selectedCheckers = index;
                 validCheckersTargets = getCheckersMoves(boardCheckers, index, myColor).map(m => m.to);
                 renderBoard();
                 return;
             }
+
+            // 点击有效目标：移动
             if (selectedCheckers >= 0 && validCheckersTargets.includes(index)) {
                 const moves = getCheckersMoves(boardCheckers, selectedCheckers, myColor);
                 const move = moves.find(m => m.to === index);
@@ -689,9 +685,13 @@
                     boardCheckers[index] = newPiece;
                     lastMove = index;
                     selectedCheckers = -1; validCheckersTargets = [];
+
                     const oppColor = myColor === 'black' ? 'red' : 'black';
                     if (!boardCheckers.some(p => p && p.color === oppColor)) {
-                        renderBoard(); endGame({ winner: currentPlayer, line: null }); return;
+                        renderBoard();
+                        if (roomRef) syncRoom();
+                        endGame({ winner: currentPlayer, line: null });
+                        return;
                     }
                     currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
                     renderBoard();
@@ -699,6 +699,8 @@
                     return;
                 }
             }
+
+            // 点击别处：取消选中
             selectedCheckers = -1; validCheckersTargets = [];
             renderBoard();
         }
@@ -732,6 +734,9 @@
             afterMove();
         }
         function afterMove() {
+            // 联机/作者模式：同步
+            if (roomRef) syncRoom();
+
             // 作者模式：如果是 AI 的回合，自动下
             if (mode === 'author' && currentPlayer === authorSide && !gameOver) {
                 isAiThinking = true;
@@ -739,11 +744,12 @@
                 setTimeout(authorMove, 400);
                 return;
             }
+            // 联机模式（普通玩家）
             if (mode === 'online') {
-                syncRoom();
                 updateStatus(currentPlayer === myRole ? '你的回合' : '等待对方…', '');
                 return;
             }
+            // 单机人机
             if (mode === 'ai' && currentPlayer === 'O') {
                 isAiThinking = true;
                 updateStatus('AI 思考中…', 'thinking');
@@ -783,7 +789,6 @@
                     let np = { color: piece.color, king: piece.king };
                     if (!piece.king) {
                         if (piece.color === 'red' && ny === 0) np.king = true;
-                        if (piece.color === 'black' && ny === 7) np.king = true;
                     }
                     boardCheckers[m.to] = np;
                     lastMove = m.to;
@@ -808,9 +813,7 @@
             updateStatus('轮到 黑棋', '');
         }
 
-        /* ============================================================
-           作者模式 · 超强 AI（帮 authorSide 下棋）
-           ============================================================ */
+        /* ===== 作者 AI ===== */
         function authorMove() {
             if (gameOver) { isAiThinking = false; return; }
             const me = authorSide;
@@ -827,7 +830,7 @@
                     lastMove = move;
                     const r = checkWinner3(board3);
                     renderBoard();
-                    if (mode === 'online' && roomRef) syncRoom();
+                    if (roomRef) syncRoom();
                     if (r) { endGame(r); return; }
                     currentPlayer = me === 'X' ? 'O' : 'X';
                     updateStatus(mode === 'online' ? '等待对方…' : `轮到 ${currentPlayer === 'X' ? '黑棋（你）' : '白棋（你）'}`, '');
@@ -841,7 +844,7 @@
                     lastMove = move;
                     const r = checkWinner5(board5);
                     renderBoard();
-                    if (mode === 'online' && roomRef) syncRoom();
+                    if (roomRef) syncRoom();
                     if (r) { endGame(r); return; }
                     currentPlayer = me === 'X' ? 'O' : 'X';
                     updateStatus(mode === 'online' ? '等待对方…' : `轮到 ${currentPlayer === 'X' ? '黑棋（你）' : '白棋（你）'}`, '');
@@ -868,7 +871,7 @@
                     boardCheckers[move.to] = np;
                     lastMove = move.to;
                     renderBoard();
-                    if (mode === 'online' && roomRef) syncRoom();
+                    if (roomRef) syncRoom();
                     const oppColor = color === 'black' ? 'red' : 'black';
                     if (!boardCheckers.some(p => p && p.color === oppColor)) {
                         endGame({ winner: me, line: null }); return;
@@ -889,7 +892,7 @@
                     }
                     lastMove = move;
                     renderBoard();
-                    if (mode === 'online' && roomRef) syncRoom();
+                    if (roomRef) syncRoom();
                     currentPlayer = me === 'X' ? 'O' : 'X';
                     updateStatus(mode === 'online' ? '等待对方…' : `轮到 ${currentPlayer === 'X' ? '黑棋（你）' : '白棋（你）'}`, '');
                     return;
@@ -935,7 +938,6 @@
                 return best;
             }
         }
-
         function authorBestGomoku(b, me) {
             const opp = me === 'X' ? 'O' : 'X';
             const n = SIZE_5;
@@ -953,7 +955,6 @@
             let depth = 4;
             if (stoneCount < 6) depth = 5;
             if (stoneCount < 2) depth = 6;
-
             const candidates = getCandidates(b);
             candidates.sort((a, c) => {
                 const sa = scorePosQuick(b, a, me) * 1.1 + scorePosQuick(b, a, opp);
@@ -962,7 +963,6 @@
             });
             const limit = stoneCount < 4 ? 20 : 14;
             const top = candidates.slice(0, limit);
-
             let bestMove = top[0], bestScore = -Infinity;
             for (const i of top) {
                 b[i] = me;
@@ -1012,7 +1012,6 @@
                 return best;
             }
         }
-
         function authorBestCheckers(b, color) {
             const allMoves = [];
             for (let i = 0; i < 64; i++) {
@@ -1060,9 +1059,7 @@
             }
             return score;
         }
-
         function authorBestGo(b, me, size) {
-            const opp = me === 'X' ? 'O' : 'X';
             const candidates = [];
             for (let i = 0; i < size*size; i++) if (b[i] === '') candidates.push(i);
             if (candidates.length === 0) return -1;
@@ -1089,7 +1086,6 @@
             }
             return candidates[Math.floor(Math.random() * candidates.length)];
         }
-
         function getBestTTT(b) {
             for (let i = 0; i < 9; i++) { if (b[i] === '') { const nb = b.slice(); nb[i] = 'O'; if (checkWinner3(nb)?.winner === 'O') return i; } }
             for (let i = 0; i < 9; i++) { if (b[i] === '') { const nb = b.slice(); nb[i] = 'X'; if (checkWinner3(nb)?.winner === 'X') return i; } }
@@ -1294,9 +1290,8 @@
                 updateStatus('平局！', 'win');
             } else {
                 let name;
-                if (mode === 'author') {
-                    name = result.winner === authorSide ? 'AI' : '你';
-                } else if (mode === 'ai' && result.winner === 'O') name = 'AI';
+                if (mode === 'author') name = result.winner === authorSide ? 'AI' : '你';
+                else if (mode === 'ai' && result.winner === 'O') name = 'AI';
                 else if (mode === 'online') name = result.winner === myRole ? '你' : '对方';
                 else name = result.winner === 'X' ? '黑棋' : '白棋';
                 updateStatus(`${name} 获胜！`, 'win');
@@ -1307,10 +1302,11 @@
                 playWinAnimation();
             }
             renderBoard();
-            if (mode === 'online' && roomRef) syncRoom();
+            if (roomRef) syncRoom();
             if (mode !== 'online' || isHost) {
                 setTimeout(() => {
                     if (mode === 'online') resetRoom();
+                    else if (mode === 'author') initGame();
                     else initGame();
                 }, 2200);
             }
@@ -1344,7 +1340,6 @@
             else initGame(true);
         }
         function setMode(newMode) {
-            // 作者模式：如果未解锁，不允许切换
             if (newMode === 'author' && !unlocked) {
                 updateStatus('请先输入卡密解锁', 'error');
                 return;
@@ -1353,15 +1348,19 @@
             modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
             roomPanel.classList.toggle('active', mode === 'online');
 
-            if (mode !== 'online' && roomRef) leaveRoom();
+            // 只有明确切到非联机、非作者时才离开房间
+            if (mode !== 'online' && mode !== 'author' && roomRef) leaveRoom();
+
             if (mode === 'online') {
                 roomActions.style.display = 'flex';
                 roomInputRow.classList.add('hidden');
                 roomInfo.classList.add('hidden');
                 updateStatus(firebaseReady ? '请创建或加入房间' : '联机需要 Firebase', firebaseReady ? '' : 'error');
             } else if (mode === 'author') {
-                // 弹出选边弹窗
-                authorModal.classList.add('active');
+                // 作者模式：保留联机连接（如果有），弹出选边
+                setTimeout(() => {
+                    authorModal.classList.add('active');
+                }, 50);
             } else {
                 initGame();
             }
@@ -1508,8 +1507,9 @@
         modeBtns.forEach(btn => btn.addEventListener('click', () => setMode(btn.dataset.mode)));
         sizeBtns.forEach(btn => btn.addEventListener('click', () => setGoSize(parseInt(btn.dataset.size, 10))));
         restartBtn.addEventListener('click', () => {
-            if (mode === 'online') { if (isHost && roomRef) resetRoom(); }
-            else initGame();
+            if (mode === 'online' || (mode === 'author' && roomRef)) {
+                if (isHost && roomRef) resetRoom();
+            } else initGame();
         });
         document.getElementById('createRoomBtn').addEventListener('click', createRoom);
         document.getElementById('joinRoomBtn').addEventListener('click', () => {
@@ -1522,7 +1522,6 @@
         roomCodeInput.addEventListener('keydown', e => { if (e.key === 'Enter') joinRoom(roomCodeInput.value); });
         roomCodeDisplay.addEventListener('click', () => { if (myRoomCode) navigator.clipboard.writeText(myRoomCode).catch(()=>{}); });
 
-        // 设置 / 卡密
         settingsBtn.addEventListener('click', () => {
             if (unlocked) {
                 if (confirm('已解锁作者模式，是否锁定？')) {
@@ -1557,26 +1556,52 @@
             if (e.key === 'Enter') document.getElementById('keyConfirm').click();
         });
 
-        // 作者选边
         document.getElementById('authorCancel').addEventListener('click', () => {
             authorModal.classList.remove('active');
-            // 取消 → 切回人机
-            mode = 'ai';
-            modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === 'ai'));
-            initGame();
+            if (roomRef) {
+                // 从联机切回联机
+                mode = 'online';
+                modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === 'online'));
+                roomPanel.classList.add('active');
+                updateStatus(currentPlayer === myRole ? '你的回合' : '等待对方…', '');
+            } else {
+                mode = 'ai';
+                modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === 'ai'));
+                initGame();
+            }
         });
         document.getElementById('chooseBlack').addEventListener('click', () => {
-            authorSide = 'X';
             authorModal.classList.remove('active');
-            initGame();
-            updateStatus('作者模式 · AI 执黑，你执白', 'gold');
+            if (roomRef && myRole) {
+                // 联机：只能帮自己颜色
+                authorSide = myRole;
+                mode = 'author';
+                updateStatus(`联机 · AI 帮你执${authorSide === 'X' ? '黑' : '白'}`, 'gold');
+                if (currentPlayer === authorSide && !gameOver) {
+                    isAiThinking = true;
+                    setTimeout(authorMove, 400);
+                }
+            } else {
+                authorSide = 'X';
+                initGame();
+                updateStatus('作者模式 · AI 执黑，你执白', 'gold');
+            }
         });
         document.getElementById('chooseWhite').addEventListener('click', () => {
-            authorSide = 'O';
             authorModal.classList.remove('active');
-            initGame();
-            updateStatus('作者模式 · AI 执白，你执黑', 'gold');
-            // AI 执白，玩家执黑先手，等玩家下
+            if (roomRef && myRole) {
+                authorSide = myRole;
+                mode = 'author';
+                updateStatus(`联机 · AI 帮你执${authorSide === 'X' ? '黑' : '白'}`, 'gold');
+                if (currentPlayer === authorSide && !gameOver) {
+                    isAiThinking = true;
+                    setTimeout(authorMove, 400);
+                }
+            } else {
+                authorSide = 'O';
+                initGame();
+                updateStatus('作者模式 · AI 执白，你执黑', 'gold');
+            }
         });
 
         // 启动
