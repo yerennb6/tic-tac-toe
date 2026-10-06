@@ -35,7 +35,7 @@
         .cell.win.x { color: #8affb0; }
         .cell.win.o { color: #ffb0c8; }
 
-        /* 五子棋 15×15 */
+        /* 五子棋 */
         .board-5 { display: grid; grid-template-columns: repeat(15,1fr); gap: 1px; width: min(92vw, 380px); margin: 0 auto 12px; background: #c8a878; border-radius: 6px; padding: 4px; }
         .cell-5 { aspect-ratio: 1/1; background: #d8bc90; display: flex; justify-content: center; align-items: center; cursor: pointer; position: relative; }
         .cell-5::after { content: ''; position: absolute; inset: 0; border: 0.5px solid rgba(80,50,20,0.4); pointer-events: none; }
@@ -58,17 +58,17 @@
         .cell-check.valid-move { box-shadow: inset 0 0 0 3px rgba(126,224,160,0.9); }
         .cell-check.last-move { box-shadow: inset 0 0 0 3px rgba(255,100,100,0.9); }
 
-        /* 围棋 —— 棋盘整体放大，格子自适应尺寸 */
+        /* ===== 围棋 —— 统一木色背景 + 细线 + 棋子描边 ===== */
         .board-go {
             display: grid;
             width: min(92vw, 520px);
             aspect-ratio: 1 / 1;
             margin: 0 auto 14px;
-            background: #dcb35c;
+            background: #e8c880;          /* 统一木色，不用黑白格 */
             border-radius: 8px;
             padding: 6px;
             gap: 0;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4), inset 0 0 30px rgba(150, 90, 20, 0.3);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4), inset 0 0 40px rgba(180, 120, 40, 0.25);
         }
         .cell-go {
             aspect-ratio: 1 / 1;
@@ -78,7 +78,16 @@
             position: relative;
             cursor: pointer;
         }
-        .cell-go::before { content: ''; position: absolute; inset: 0; border: 0.5px solid rgba(60,30,0,0.55); }
+        /* 交叉线：细一点，颜色浅一点 */
+        .cell-go::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 0.4px solid rgba(80, 50, 20, 0.5);
+        }
+        .cell-go:hover:not(.has-stone) {
+            background: rgba(255, 220, 120, 0.4);
+        }
         .cell-go .stone {
             width: 88%;
             height: 88%;
@@ -86,22 +95,22 @@
             pointer-events: none;
             position: relative;
             z-index: 1;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.45);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
         }
-        .cell-go .stone.black { background: radial-gradient(circle at 35% 30%, #555, #000); }
-        .cell-go .stone.white { background: radial-gradient(circle at 35% 30%, #fff, #c8c8c8); }
-        .cell-go.last-move .stone { box-shadow: 0 0 0 3px rgba(255,200,0,0.95), 0 2px 4px rgba(0,0,0,0.45); }
-        .cell-go:hover:not(.has-stone) { background: rgba(255,255,255,0.12); }
-        .cell-go .star-point {
-            position: absolute;
-            width: 22%;
-            height: 22%;
-            background: #3a1a00;
-            border-radius: 50%;
-            z-index: 0;
+        /* 黑棋：带亮边，避免在木色上看不清 */
+        .cell-go .stone.black {
+            background: radial-gradient(circle at 35% 30%, #444, #000);
+            border: 1px solid rgba(200, 200, 200, 0.5);
+        }
+        /* 白棋：带暗边，避免在木色上糊掉 */
+        .cell-go .stone.white {
+            background: radial-gradient(circle at 35% 30%, #fff, #ccc);
+            border: 1px solid rgba(80, 50, 20, 0.6);
+        }
+        .cell-go.last-move .stone {
+            box-shadow: 0 0 0 3px rgba(255, 100, 0, 0.95), 0 2px 5px rgba(0,0,0,0.5);
         }
 
-        /* 围棋信息 */
         .go-info { display: flex; justify-content: center; gap: 24px; margin-bottom: 12px; font-size: 0.75rem; color: rgba(255,255,255,0.55); }
         .go-info span { font-weight: 700; font-size: 1rem; display: block; margin-top: 2px; color: #fff; }
 
@@ -146,7 +155,6 @@
             <button class="mode-btn" data-mode="online">联机</button>
         </div>
 
-        <!-- 围棋尺寸切换 -->
         <div class="go-size-switch hidden" id="goSizeSwitch">
             <button class="size-btn active" data-size="9">9×9</button>
             <button class="size-btn" data-size="13">13×13</button>
@@ -199,7 +207,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
     <script>
-        // ===== Firebase =====
         const firebaseConfig = {
             apiKey: "AIzaSyBsw0bf6kVPwaU7kyiAgSkXSNvp8ToDJ6E",
             authDomain: "xingmo-e6636.firebaseapp.com",
@@ -212,7 +219,6 @@
         let db = null, firebaseReady = false;
         try { firebase.initializeApp(firebaseConfig); db = firebase.database(); firebaseReady = true; } catch(e) {}
 
-        // ===== DOM =====
         const statusEl = document.getElementById('status');
         const restartBtn = document.getElementById('restart');
         const gameBtns = document.querySelectorAll('.game-btn');
@@ -236,35 +242,24 @@
         const roomCodeDisplay = document.getElementById('roomCodeDisplay');
         const roomHint = document.getElementById('roomHint');
 
-        // ===== 状态 =====
         let gameType = 'ttt';
         let mode = 'ai';
         let currentPlayer = 'X';
         let gameOver = false;
         let isAiThinking = false;
         let lastMove = -1;
-
-        // 围棋尺寸（9 / 13 / 19）
         let GO_SIZE = 9;
-        // 围棋棋盘
         let boardGo = [];
         let goCaptures = { X: 0, O: 0 };
         let goKoPoint = -1;
-
-        // 井字棋
         let board3 = Array(9).fill('');
-        // 五子棋
         let board5 = Array(225).fill('');
-        // 跳棋
         let boardCheckers = [];
         let historyX = [], historyO = [];
-
-        // 联机
         let myRole = null, myRoomCode = null, roomRef = null, roomListener = null, isHost = false;
 
-        const SIZE_5 = 15, SIZE_CHECK = 8;
+        const SIZE_5 = 15;
 
-        // ===== 工具 =====
         function updateStatus(text, cls) {
             statusEl.textContent = text;
             statusEl.className = 'status' + (cls ? ' ' + cls : '');
@@ -277,15 +272,11 @@
             goInfo.classList.toggle('hidden', type !== 'go');
             goSizeSwitch.classList.toggle('hidden', type !== 'go');
         }
-
-        // ===== 跳棋初始化 =====
         function initCheckersBoard() {
             boardCheckers = Array(64).fill(null);
             for (let y = 0; y < 3; y++) for (let x = 0; x < 8; x++) if ((x + y) % 2 === 1) boardCheckers[y*8+x] = { color: 'black', king: false };
             for (let y = 5; y < 8; y++) for (let x = 0; x < 8; x++) if ((x + y) % 2 === 1) boardCheckers[y*8+x] = { color: 'red', king: false };
         }
-
-        // ===== 围棋：气判定 =====
         function getGroupAndLibs(b, start, size) {
             const color = b[start];
             if (!color) return { group: [], libs: new Set() };
@@ -305,7 +296,6 @@
             }
             return { group, libs };
         }
-
         function tryCapture(b, color, size) {
             const opponent = color === 'X' ? 'O' : 'X';
             const toRemove = [];
@@ -319,9 +309,8 @@
             toRemove.forEach(i => b[i] = '');
             return toRemove.length;
         }
-
         function getGoAI(b, aiColor, size) {
-            const me = aiColor, opp = me === 'X' ? 'O' : 'X';
+            const me = aiColor;
             const candidates = [];
             for (let i = 0; i < size*size; i++) if (b[i] === '') candidates.push(i);
             if (candidates.length === 0) return -1;
@@ -345,8 +334,6 @@
             }
             return best;
         }
-
-        // ===== 检查胜负 =====
         const WIN_3 = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
         function checkWinner3(b) {
             for (const line of WIN_3) {
@@ -359,27 +346,23 @@
         function checkWinner5(b) {
             const n = SIZE_5;
             const dirs = [[1,0],[0,1],[1,1],[1,-1]];
-            for (let y = 0; y < n; y++) {
-                for (let x = 0; x < n; x++) {
-                    const idx = y*n+x, v = b[idx];
-                    if (!v) continue;
-                    for (const [dx, dy] of dirs) {
-                        let count = 1;
-                        const line = [idx];
-                        for (let k = 1; k < 5; k++) {
-                            const nx = x+dx*k, ny = y+dy*k;
-                            if (nx<0||nx>=n||ny<0||ny>=n) break;
-                            if (b[ny*n+nx] !== v) break;
-                            count++; line.push(ny*n+nx);
-                        }
-                        if (count >= 5) return { winner: v, line };
+            for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) {
+                const idx = y*n+x, v = b[idx];
+                if (!v) continue;
+                for (const [dx, dy] of dirs) {
+                    let count = 1;
+                    const line = [idx];
+                    for (let k = 1; k < 5; k++) {
+                        const nx = x+dx*k, ny = y+dy*k;
+                        if (nx<0||nx>=n||ny<0||ny>=n) break;
+                        if (b[ny*n+nx] !== v) break;
+                        count++; line.push(ny*n+nx);
                     }
+                    if (count >= 5) return { winner: v, line };
                 }
             }
             return null;
         }
-
-        // ===== 渲染 =====
         function renderBoard() {
             if (gameType === 'ttt') {
                 cells3.forEach((cell, i) => {
@@ -426,7 +409,6 @@
                     boardCheckersEl.appendChild(c);
                 }
             } else if (gameType === 'go') {
-                // 根据尺寸设置列数
                 boardGoEl.style.gridTemplateColumns = `repeat(${GO_SIZE}, 1fr)`;
                 boardGoEl.innerHTML = '';
                 for (let i = 0; i < GO_SIZE*GO_SIZE; i++) {
@@ -446,8 +428,6 @@
                 }
             }
         }
-
-        // ===== 初始化 =====
         function initGame(skipNetwork) {
             if (gameType === 'ttt') board3 = Array(9).fill('');
             else if (gameType === 'gomoku') board5 = Array(225).fill('');
@@ -459,7 +439,6 @@
                 blackCaptureEl.textContent = '0';
                 whiteCaptureEl.textContent = '0';
             }
-
             currentPlayer = 'X';
             gameOver = false;
             isAiThinking = false;
@@ -467,24 +446,19 @@
             historyX = []; historyO = [];
             selectedCheckers = -1; validCheckersTargets = [];
             renderBoard();
-
             if (mode === 'ai') updateStatus('黑棋（X）先手', '');
             else if (mode === 'online') {
                 if (myRole) updateStatus(`你是 ${myRole === 'X' ? '黑棋' : '白棋'} · ${currentPlayer === myRole ? '你的回合' : '等待对方…'}`, '');
                 else updateStatus('请创建或加入房间', '');
             }
-
             if (mode === 'online' && !skipNetwork && isHost && roomRef) syncRoom();
         }
-
-        // ===== 点击 =====
         function handleCellClick3(index) {
             if (gameOver || board3[index] !== '' || isAiThinking) return;
             if (mode === 'online') { if (!myRole || currentPlayer !== myRole) return; }
             if (mode === 'ai' && currentPlayer === 'O') return;
             doMove3(index);
         }
-
         function doMove3(index) {
             const player = currentPlayer;
             const myHist = player === 'X' ? historyX : historyO;
@@ -498,7 +472,6 @@
             currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
             afterMove();
         }
-
         function handleCellClick5(index) {
             if (gameOver || board5[index] !== '' || isAiThinking) return;
             if (mode === 'online') { if (!myRole || currentPlayer !== myRole) return; }
@@ -512,7 +485,6 @@
             currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
             afterMove();
         }
-
         let selectedCheckers = -1, validCheckersTargets = [];
         function handleClickCheckers(index) {
             if (gameOver || isAiThinking) return;
@@ -559,16 +531,13 @@
             selectedCheckers = -1; validCheckersTargets = [];
             renderBoard();
         }
-
         function handleClickGo(index) {
             if (gameOver || boardGo[index] !== '' || isAiThinking) return;
             if (mode === 'online') { if (!myRole || currentPlayer !== myRole) return; }
             if (mode === 'ai' && currentPlayer === 'O') return;
-
             const player = currentPlayer;
             const test = boardGo.slice();
             test[index] = player;
-
             const { libs } = getGroupAndLibs(test, index, GO_SIZE);
             if (libs.size === 0) {
                 const captured = tryCapture(test, player, GO_SIZE);
@@ -576,29 +545,20 @@
             } else {
                 const captured = tryCapture(test, player, GO_SIZE);
                 if (captured > 0) {
-                    // 记录提子数
                     if (player === 'X') { goCaptures.X += captured; blackCaptureEl.textContent = goCaptures.X; }
                     else { goCaptures.O += captured; whiteCaptureEl.textContent = goCaptures.O; }
-                    // 简化劫争：如果提了 1 子，禁入点就是刚提掉的位置
                     if (captured === 1) goKoPoint = index;
                     else goKoPoint = -1;
                 } else {
                     goKoPoint = -1;
                 }
             }
-
-            if (index === goKoPoint && goKoPoint !== -1) {
-                // 允许，因为这是我们刚落子的位置
-            }
-
             boardGo = test;
             lastMove = index;
             renderBoard();
             currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
             afterMove();
         }
-
-        // ===== 移动后 =====
         function afterMove() {
             if (mode === 'online') {
                 syncRoom();
@@ -614,8 +574,6 @@
                 updateStatus(`轮到 ${name}`, '');
             }
         }
-
-        // ===== AI =====
         function aiMove() {
             if (gameOver) { isAiThinking = false; return; }
             let move = -1;
@@ -670,8 +628,6 @@
             isAiThinking = false;
             updateStatus('轮到 黑棋', '');
         }
-
-        // 井字棋 AI
         function getBestTTT(b) {
             for (let i = 0; i < 9; i++) { if (b[i] === '') { const nb = b.slice(); nb[i] = 'O'; if (checkWinner3(nb)?.winner === 'O') return i; } }
             for (let i = 0; i < 9; i++) { if (b[i] === '') { const nb = b.slice(); nb[i] = 'X'; if (checkWinner3(nb)?.winner === 'X') return i; } }
@@ -681,8 +637,6 @@
             const empty = b.map((v,i) => v === '' ? i : -1).filter(i => i >= 0);
             return empty.length ? empty[Math.floor(Math.random()*empty.length)] : -1;
         }
-
-        // 五子棋 AI（Minimax + 棋型评估）
         const GOMOKU_SHAPE = { FIVE: 1000000, OPEN_FOUR: 100000, FOUR: 10000, OPEN_THREE: 8000, THREE: 1000, OPEN_TWO: 800, TWO: 100, ONE: 10 };
         function shapeScore(count, openEnds) {
             if (count >= 5) return GOMOKU_SHAPE.FIVE;
@@ -697,28 +651,26 @@
             const n = SIZE_5;
             let score = 0;
             const dirs = [[1,0],[0,1],[1,1],[1,-1]];
-            for (let y = 0; y < n; y++) {
-                for (let x = 0; x < n; x++) {
-                    const idx = y*n+x;
-                    if (b[idx] !== player) continue;
-                    for (const [dx, dy] of dirs) {
-                        let count = 1, before = false, after = false;
-                        for (let k = 1; k < 5; k++) {
-                            const nx = x+dx*k, ny = y+dy*k;
-                            if (nx<0||nx>=n||ny<0||ny>=n) { after = true; break; }
-                            if (b[ny*n+nx] === player) count++;
-                            else if (b[ny*n+nx] === '') break;
-                            else { after = true; break; }
-                        }
-                        for (let k = 1; k < 5; k++) {
-                            const nx = x-dx*k, ny = y-dy*k;
-                            if (nx<0||nx>=n||ny<0||ny>=n) { before = true; break; }
-                            if (b[ny*n+nx] === player) count++;
-                            else if (b[ny*n+nx] === '') break;
-                            else { before = true; break; }
-                        }
-                        score += shapeScore(count, (before?0:1)+(after?0:1));
+            for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) {
+                const idx = y*n+x;
+                if (b[idx] !== player) continue;
+                for (const [dx, dy] of dirs) {
+                    let count = 1, before = false, after = false;
+                    for (let k = 1; k < 5; k++) {
+                        const nx = x+dx*k, ny = y+dy*k;
+                        if (nx<0||nx>=n||ny<0||ny>=n) { after = true; break; }
+                        if (b[ny*n+nx] === player) count++;
+                        else if (b[ny*n+nx] === '') break;
+                        else { after = true; break; }
                     }
+                    for (let k = 1; k < 5; k++) {
+                        const nx = x-dx*k, ny = y-dy*k;
+                        if (nx<0||nx>=n||ny<0||ny>=n) { before = true; break; }
+                        if (b[ny*n+nx] === player) count++;
+                        else if (b[ny*n+nx] === '') break;
+                        else { before = true; break; }
+                    }
+                    score += shapeScore(count, (before?0:1)+(after?0:1));
                 }
             }
             return score;
@@ -833,8 +785,6 @@
             }
             return bestMove;
         }
-
-        // 跳棋走法
         function getCheckersMoves(b, index, playerColor) {
             const x = index % 8, y = Math.floor(index / 8);
             const piece = b[index];
@@ -876,8 +826,6 @@
             if (captures.length) return captures[0];
             return moves[Math.floor(Math.random() * moves.length)];
         }
-
-        // ===== 结束游戏 =====
         function endGame(result) {
             gameOver = true;
             let name;
@@ -897,8 +845,6 @@
                 }, 1800);
             }
         }
-
-        // ===== 模式/游戏切换 =====
         function setGame(newGame) {
             gameType = newGame;
             gameBtns.forEach(b => b.classList.toggle('active', b.dataset.game === gameType));
@@ -906,7 +852,6 @@
             if (mode !== 'online') initGame();
             else initGame(true);
         }
-
         function setMode(newMode) {
             mode = newMode;
             modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
@@ -921,14 +866,11 @@
                 initGame();
             }
         }
-
         function setGoSize(size) {
             GO_SIZE = size;
             sizeBtns.forEach(b => b.classList.toggle('active', b.dataset.size == size));
             if (gameType === 'go') initGame();
         }
-
-        // ===== 联机 =====
         function generateRoomCode() {
             const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
             let code = '';
@@ -1057,8 +999,6 @@
             roomInfo.classList.add('hidden');
             updateStatus('已离开房间', '');
         }
-
-        // ===== 事件 =====
         cells3.forEach(cell => cell.addEventListener('click', () => handleCellClick3(parseInt(cell.dataset.index, 10))));
         gameBtns.forEach(btn => btn.addEventListener('click', () => setGame(btn.dataset.game)));
         modeBtns.forEach(btn => btn.addEventListener('click', () => setMode(btn.dataset.mode)));
@@ -1078,7 +1018,6 @@
         roomCodeInput.addEventListener('keydown', e => { if (e.key === 'Enter') joinRoom(roomCodeInput.value); });
         roomCodeDisplay.addEventListener('click', () => { if (myRoomCode) navigator.clipboard.writeText(myRoomCode).catch(()=>{}); });
 
-        // ===== 启动 =====
         showBoard(gameType);
         initGame();
     </script>
