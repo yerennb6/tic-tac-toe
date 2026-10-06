@@ -31,20 +31,8 @@
         }
         h1 { font-size: 1.3rem; font-weight: 700; letter-spacing: 3px; margin-bottom: 10px; color: #fff; text-align: center; }
 
-        /* ===== 上方功能区 ===== */
-        .top-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .game-switch, .mode-switch, .go-size-switch {
-            display: flex;
-            justify-content: center;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
+        .top-panel { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+        .game-switch, .mode-switch, .go-size-switch { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
         .game-btn { padding: 7px 14px; border-radius: 30px; border: none; font-size: 0.78rem; font-weight: 600; color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); cursor: pointer; transition: all 0.2s; outline: none; }
         .game-btn.active { color: #fff; background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.4); }
         .mode-btn { padding: 6px 14px; border-radius: 30px; border: none; font-size: 0.75rem; font-weight: 600; color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; outline: none; }
@@ -57,7 +45,6 @@
         .status.thinking { color: #8fb8ff; }
         .status.error { color: #ff8f8f; }
 
-        /* ===== 下方棋盘区 ===== */
         .board-area {
             display: flex;
             flex-direction: column;
@@ -65,6 +52,21 @@
             justify-content: center;
             min-height: 200px;
         }
+
+        /* 比分栏 */
+        .score-board {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 10px;
+            font-size: 0.72rem;
+            color: rgba(255,255,255,0.65);
+            letter-spacing: 1px;
+        }
+        .score-item { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+        .score-item span { font-weight: 700; font-size: 1.3rem; color: #fff; }
+        .score-item.black-score span { color: #6cb8ff; }
+        .score-item.white-score span { color: #ff8fb0; }
 
         /* 井字棋 */
         .board-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; width: min(65vw, 260px); margin: 0 auto 14px; }
@@ -101,7 +103,7 @@
         .cell-check.valid-move { box-shadow: inset 0 0 0 3px rgba(126,224,160,0.9); }
         .cell-check.last-move { box-shadow: inset 0 0 0 3px rgba(255,100,100,0.9); }
 
-        /* 围棋 —— 统一木色 + 细线 + 棋子描边 */
+        /* 围棋 */
         .board-go {
             display: grid;
             width: min(92vw, 520px);
@@ -113,43 +115,13 @@
             gap: 0;
             box-shadow: 0 4px 20px rgba(0,0,0,0.4), inset 0 0 40px rgba(180, 120, 40, 0.25);
         }
-        .cell-go {
-            aspect-ratio: 1 / 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            cursor: pointer;
-        }
-        .cell-go::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border: 0.4px solid rgba(80, 50, 20, 0.5);
-        }
-        .cell-go:hover:not(.has-stone) {
-            background: rgba(255, 220, 120, 0.4);
-        }
-        .cell-go .stone {
-            width: 88%;
-            height: 88%;
-            border-radius: 50%;
-            pointer-events: none;
-            position: relative;
-            z-index: 1;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-        }
-        .cell-go .stone.black {
-            background: radial-gradient(circle at 35% 30%, #444, #000);
-            border: 1px solid rgba(200, 200, 200, 0.5);
-        }
-        .cell-go .stone.white {
-            background: radial-gradient(circle at 35% 30%, #fff, #ccc);
-            border: 1px solid rgba(80, 50, 20, 0.6);
-        }
-        .cell-go.last-move .stone {
-            box-shadow: 0 0 0 3px rgba(255, 100, 0, 0.95), 0 2px 5px rgba(0,0,0,0.5);
-        }
+        .cell-go { aspect-ratio: 1 / 1; display: flex; justify-content: center; align-items: center; position: relative; cursor: pointer; }
+        .cell-go::before { content: ''; position: absolute; inset: 0; border: 0.4px solid rgba(80, 50, 20, 0.5); }
+        .cell-go:hover:not(.has-stone) { background: rgba(255, 220, 120, 0.4); }
+        .cell-go .stone { width: 88%; height: 88%; border-radius: 50%; pointer-events: none; position: relative; z-index: 1; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+        .cell-go .stone.black { background: radial-gradient(circle at 35% 30%, #444, #000); border: 1px solid rgba(200, 200, 200, 0.5); }
+        .cell-go .stone.white { background: radial-gradient(circle at 35% 30%, #fff, #ccc); border: 1px solid rgba(80, 50, 20, 0.6); }
+        .cell-go.last-move .stone { box-shadow: 0 0 0 3px rgba(255, 100, 0, 0.95), 0 2px 5px rgba(0,0,0,0.5); }
 
         .go-info { display: flex; justify-content: center; gap: 24px; margin-bottom: 12px; font-size: 0.75rem; color: rgba(255,255,255,0.7); }
         .go-info span { font-weight: 700; font-size: 1rem; display: block; margin-top: 2px; color: #fff; }
@@ -169,6 +141,50 @@
         .room-input-row { display: flex; gap: 8px; justify-content: center; }
         .hidden { display: none !important; }
 
+        /* ===== 胜利动画 ===== */
+        .board-area.win-glow {
+            animation: winGlow 1.2s ease-in-out infinite alternate;
+        }
+        @keyframes winGlow {
+            0% { filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.5)); }
+            100% { filter: drop-shadow(0 0 24px rgba(255, 215, 0, 1)); }
+        }
+
+        .win-text {
+            position: fixed;
+            top: 42%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 2.8rem;
+            font-weight: 900;
+            letter-spacing: 6px;
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255,215,0,0.9), 0 0 40px rgba(255,150,0,0.7);
+            z-index: 9999;
+            pointer-events: none;
+            animation: winPop 1.5s ease forwards;
+        }
+        @keyframes winPop {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            40% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
+            60% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 8px;
+            height: 14px;
+            top: -20px;
+            z-index: 9998;
+            pointer-events: none;
+            animation: confettiFall linear forwards;
+        }
+        @keyframes confettiFall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(105vh) rotate(720deg); opacity: 0.3; }
+        }
+
         @media (max-width: 400px) {
             .game-container { padding: 12px 10px 14px; }
             h1 { font-size: 1.1rem; }
@@ -176,6 +192,7 @@
             .game-btn { padding: 5px 10px; font-size: 0.7rem; }
             .mode-btn { padding: 5px 10px; font-size: 0.68rem; }
             .size-btn { padding: 4px 10px; font-size: 0.65rem; }
+            .win-text { font-size: 2rem; }
         }
     </style>
 </head>
@@ -183,7 +200,6 @@
     <div class="game-container">
         <h1>棋类游戏</h1>
 
-        <!-- ===== 上方功能区 ===== -->
         <div class="top-panel">
             <div class="game-switch" id="gameSwitch">
                 <button class="game-btn active" data-game="ttt">井字棋</button>
@@ -222,8 +238,12 @@
             <div class="status" id="status">选择游戏开始</div>
         </div>
 
-        <!-- ===== 下方棋盘区 ===== -->
-        <div class="board-area">
+        <div class="board-area" id="boardArea">
+            <div class="score-board" id="scoreBoard">
+                <div class="score-item black-score">黑棋胜<span id="scoreBlack">0</span></div>
+                <div class="score-item white-score">白棋胜<span id="scoreWhite">0</span></div>
+            </div>
+
             <div class="board-3" id="board3">
                 <div class="cell" data-index="0"></div>
                 <div class="cell" data-index="1"></div>
@@ -279,6 +299,10 @@
         const cells3 = document.querySelectorAll('#board3 .cell');
         const blackCaptureEl = document.getElementById('blackCapture');
         const whiteCaptureEl = document.getElementById('whiteCapture');
+        const boardArea = document.getElementById('boardArea');
+
+        const scoreBlackEl = document.getElementById('scoreBlack');
+        const scoreWhiteEl = document.getElementById('scoreWhite');
 
         const roomPanel = document.getElementById('roomPanel');
         const roomActions = document.getElementById('roomActions');
@@ -302,6 +326,8 @@
         let board5 = Array(225).fill('');
         let boardCheckers = [];
         let historyX = [], historyO = [];
+        let scoreBlack = 0;
+        let scoreWhite = 0;
         let myRole = null, myRoomCode = null, roomRef = null, roomListener = null, isHost = false;
 
         const SIZE_5 = 15;
@@ -475,6 +501,9 @@
             }
         }
         function initGame(skipNetwork) {
+            document.querySelectorAll('.confetti, .win-text').forEach(e => e.remove());
+            boardArea.classList.remove('win-glow');
+
             if (gameType === 'ttt') board3 = Array(9).fill('');
             else if (gameType === 'gomoku') board5 = Array(225).fill('');
             else if (gameType === 'checkers') initCheckersBoard();
@@ -874,13 +903,21 @@
         }
         function endGame(result) {
             gameOver = true;
-            let name;
-            if (result.winner === 'draw') { updateStatus('平局！', 'win'); }
-            else {
+            if (result.winner === 'draw') {
+                updateStatus('平局！', 'win');
+            } else {
+                let name;
                 if (mode === 'ai' && result.winner === 'O') name = 'AI';
                 else if (mode === 'online') name = result.winner === myRole ? '你' : '对方';
                 else name = result.winner === 'X' ? '黑棋' : '白棋';
                 updateStatus(`${name} 获胜！`, 'win');
+
+                // 记录胜场
+                if (result.winner === 'X') { scoreBlack++; scoreBlackEl.textContent = scoreBlack; }
+                else { scoreWhite++; scoreWhiteEl.textContent = scoreWhite; }
+
+                // 胜利动画
+                playWinAnimation();
             }
             renderBoard();
             if (mode === 'online' && roomRef) syncRoom();
@@ -888,9 +925,38 @@
                 setTimeout(() => {
                     if (mode === 'online') resetRoom();
                     else initGame();
-                }, 1800);
+                }, 2200);
             }
         }
+
+        /* ===== 胜利动画 ===== */
+        function playWinAnimation() {
+            // 1. 棋盘发光
+            boardArea.classList.add('win-glow');
+            setTimeout(() => boardArea.classList.remove('win-glow'), 2200);
+
+            // 2. 胜利文字
+            const winText = document.createElement('div');
+            winText.className = 'win-text';
+            winText.textContent = '胜利！';
+            document.body.appendChild(winText);
+            setTimeout(() => winText.remove(), 1600);
+
+            // 3. 撒花粒子
+            const colors = ['#ff6b6b', '#ffd93d', '#6bcbff', '#7ee0a0', '#ff8fb0', '#c084fc'];
+            for (let i = 0; i < 60; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = (1.5 + Math.random() * 1.5) + 's';
+                confetti.style.animationDelay = (Math.random() * 0.5) + 's';
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 3500);
+            }
+        }
+
         function setGame(newGame) {
             gameType = newGame;
             gameBtns.forEach(b => b.classList.toggle('active', b.dataset.game === gameType));
@@ -933,7 +999,7 @@
             return {
                 gameType, GO_SIZE, board3, board5, boardCheckers, boardGo,
                 currentPlayer, gameOver, lastMove, historyX, historyO,
-                goCaptures, goKoPoint
+                goCaptures, goKoPoint, scoreBlack, scoreWhite
             };
         }
         function syncRoom() {
@@ -1022,6 +1088,8 @@
                 if (d.boardCheckers) boardCheckers = d.boardCheckers;
                 if (d.goCaptures) { goCaptures = d.goCaptures; blackCaptureEl.textContent = goCaptures.X || 0; whiteCaptureEl.textContent = goCaptures.O || 0; }
                 if (d.goKoPoint !== undefined) goKoPoint = d.goKoPoint;
+                if (d.scoreBlack !== undefined) { scoreBlack = d.scoreBlack; scoreBlackEl.textContent = scoreBlack; }
+                if (d.scoreWhite !== undefined) { scoreWhite = d.scoreWhite; scoreWhiteEl.textContent = scoreWhite; }
                 currentPlayer = d.currentPlayer || 'X';
                 gameOver = d.gameOver || false;
                 lastMove = d.lastMove !== undefined ? d.lastMove : -1;
