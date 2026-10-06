@@ -12,7 +12,6 @@
             font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
-
         body {
             min-height: 100vh;
             background: radial-gradient(circle at 35% 35%, #1a2333, #0a0e16 85%);
@@ -22,7 +21,6 @@
             user-select: none;
             padding: 16px;
         }
-
         .game-container {
             text-align: center;
             padding: 28px 24px;
@@ -37,7 +35,6 @@
             max-width: 440px;
             width: 100%;
         }
-
         h1 {
             font-size: 1.6rem;
             font-weight: 700;
@@ -48,14 +45,12 @@
             background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-
         .rule-tip {
             font-size: 0.72rem;
             color: rgba(255, 200, 100, 0.75);
             letter-spacing: 1px;
             margin-bottom: 14px;
         }
-
         .mode-switch {
             display: flex;
             justify-content: center;
@@ -63,7 +58,6 @@
             margin-bottom: 14px;
             flex-wrap: wrap;
         }
-
         .mode-btn {
             padding: 8px 22px;
             border-radius: 40px;
@@ -83,12 +77,6 @@
             outline: none;
             -webkit-tap-highlight-color: transparent;
         }
-
-        .mode-btn:hover {
-            background: rgba(255, 255, 255, 0.08);
-            color: rgba(220, 230, 245, 0.9);
-        }
-
         .mode-btn.active {
             color: #ffffff;
             background: rgba(120, 170, 255, 0.15);
@@ -96,12 +84,6 @@
                 0 0 18px rgba(100, 150, 255, 0.2),
                 inset 0 0 0 0.5px rgba(140, 180, 255, 0.3);
         }
-
-        .mode-btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
         .status {
             font-size: 0.95rem;
             color: rgba(200, 215, 235, 0.75);
@@ -110,12 +92,10 @@
             min-height: 24px;
             transition: color 0.3s ease;
         }
-
         .status.thinking { color: #8fb8ff; font-weight: 500; }
         .status.win { color: #7ee0a0; font-weight: 600; }
         .status.fade { color: #ffb080; font-weight: 500; }
         .status.error { color: #ff8f8f; font-weight: 500; }
-
         .board {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -123,7 +103,6 @@
             width: min(72vw, 300px);
             margin: 0 auto 16px;
         }
-
         .cell {
             aspect-ratio: 1 / 1;
             border-radius: 20px;
@@ -132,8 +111,7 @@
             -webkit-backdrop-filter: blur(10px);
             box-shadow:
                 0 6px 16px -6px rgba(0, 0, 0, 0.6),
-                inset 0 0 0 0.5px rgba(255, 255, 255, 0.1),
-                inset 0 0 24px rgba(255, 255, 255, 0.02);
+                inset 0 0 0 0.5px rgba(255, 255, 255, 0.1);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -143,18 +121,15 @@
             transition: all 0.2s ease;
             color: transparent;
         }
-
         .cell:hover:not(.taken):not(.disabled) {
             background: rgba(255, 255, 255, 0.08);
             transform: translateY(-2px);
         }
-
         .cell:active:not(.taken):not(.disabled) { transform: scale(0.96); }
         .cell.taken { cursor: default; }
         .cell.disabled { cursor: not-allowed; opacity: 0.7; }
         .cell.x { color: #6cb8ff; text-shadow: 0 0 18px rgba(108, 184, 255, 0.6); }
         .cell.o { color: #ff8fb0; text-shadow: 0 0 18px rgba(255, 143, 176, 0.6); }
-
         .cell.win {
             background: rgba(126, 224, 160, 0.12);
             box-shadow:
@@ -163,13 +138,11 @@
         }
         .cell.win.x { color: #8affb0; text-shadow: 0 0 22px rgba(126, 224, 160, 0.8); }
         .cell.win.o { color: #ffb0c8; text-shadow: 0 0 22px rgba(255, 143, 176, 0.8); }
-
         .cell.fading { animation: fadeOut 0.35s ease forwards; }
         @keyframes fadeOut {
             0% { opacity: 1; transform: scale(1); }
             100% { opacity: 0; transform: scale(0.7); }
         }
-
         .btn {
             display: inline-block;
             padding: 11px 28px;
@@ -190,11 +163,7 @@
             outline: none;
             -webkit-tap-highlight-color: transparent;
         }
-
-        .btn:hover { background: rgba(255, 255, 255, 0.12); transform: translateY(-2px); }
         .btn:active { transform: scale(0.96); }
-        .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-
         .score {
             display: flex;
             justify-content: center;
@@ -207,15 +176,8 @@
         .score span { font-weight: 700; font-size: 1rem; display: block; margin-top: 2px; }
         .score .x-score span { color: #6cb8ff; }
         .score .o-score span { color: #ff8fb0; }
-
-        .room-panel {
-            display: none;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
+        .room-panel { display: none; flex-direction: column; gap: 12px; margin-bottom: 16px; }
         .room-panel.active { display: flex; }
-
         .room-code-display {
             font-size: 2rem;
             font-weight: 700;
@@ -229,20 +191,8 @@
             user-select: text;
             cursor: pointer;
         }
-        .room-code-display:active { background: rgba(120, 180, 255, 0.15); }
-
-        .room-hint {
-            font-size: 0.72rem;
-            color: rgba(200, 215, 235, 0.5);
-            letter-spacing: 0.5px;
-        }
-
-        .room-input-row {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-        }
-
+        .room-hint { font-size: 0.72rem; color: rgba(200, 215, 235, 0.5); letter-spacing: 0.5px; }
+        .room-input-row { display: flex; gap: 8px; justify-content: center; }
         .room-input {
             flex: 1;
             max-width: 180px;
@@ -259,29 +209,11 @@
             outline: none;
             text-transform: uppercase;
         }
-        .room-input::placeholder {
-            color: rgba(200, 215, 235, 0.3);
-            letter-spacing: 1px;
-            font-weight: 400;
-        }
-        .room-input:focus {
-            box-shadow: inset 0 0 0 1px rgba(140, 180, 255, 0.5);
-        }
-
-        .room-actions {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
+        .room-actions { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
         @media (max-width: 400px) {
             .game-container { padding: 20px 14px; border-radius: 28px; }
             h1 { font-size: 1.3rem; letter-spacing: 3px; }
             .cell { font-size: 2.2rem; border-radius: 16px; }
-            .board { gap: 8px; }
-            .mode-btn { padding: 7px 16px; font-size: 0.78rem; }
-            .btn { padding: 9px 20px; font-size: 0.8rem; }
             .room-code-display { font-size: 1.6rem; letter-spacing: 6px; }
         }
     </style>
@@ -338,9 +270,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
     <script>
-        /* ============================================================
-           Firebase 配置 — 已填入你的项目（databaseURL 已修正）
-           ============================================================ */
         const firebaseConfig = {
             apiKey: "AIzaSyBsw0bf6kVPwaU7kyiAgSkXSNvp8ToDJ6E",
             authDomain: "xingmo-e6636.firebaseapp.com",
@@ -352,23 +281,16 @@
             measurementId: "G-BFTC9QCSYL"
         };
 
-        const firebaseConfigured = firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY";
-
         let db = null;
         let firebaseReady = false;
         try {
-            if (firebaseConfigured) {
-                firebase.initializeApp(firebaseConfig);
-                db = firebase.database();
-                firebaseReady = true;
-            }
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.database();
+            firebaseReady = true;
         } catch (e) {
             console.warn('Firebase 初始化失败：', e);
         }
 
-        /* ============================================================
-           游戏状态
-           ============================================================ */
         const statusEl = document.getElementById('status');
         const restartBtn = document.getElementById('restart');
         const scoreXEl = document.getElementById('scoreX');
@@ -395,21 +317,10 @@
         let mode = 'ai';
         let isAiThinking = false;
         let scoreX = 0, scoreO = 0;
-
-        let historyX = [];
-        let historyO = [];
-
+        let historyX = [], historyO = [];
         let autoRestartTimer = null;
+        let myRole = null, myRoomCode = null, roomRef = null, roomListener = null, isHost = false;
 
-        let myRole = null;
-        let myRoomCode = null;
-        let roomRef = null;
-        let roomListener = null;
-        let isHost = false;
-
-        /* ============================================================
-           工具函数
-           ============================================================ */
         function updateStatus(text, className) {
             statusEl.textContent = text;
             statusEl.className = 'status' + (className ? ' ' + className : '');
@@ -428,9 +339,7 @@
                         if (board[i] === '') cell.classList.add('disabled');
                     }
                 }
-                if (isAiThinking && board[i] === '') {
-                    cell.classList.add('disabled');
-                }
+                if (isAiThinking && board[i] === '') cell.classList.add('disabled');
             });
         }
 
@@ -456,28 +365,18 @@
                 }
             });
             const result = checkWinner(board);
-            if (result) {
-                result.line.forEach(i => cells[i].classList.add('win'));
-            }
+            if (result) result.line.forEach(i => cells[i].classList.add('win'));
             updateCellStates();
         }
 
-        /* ============================================================
-           初始化
-           ============================================================ */
         function initGame(skipNetwork) {
-            if (autoRestartTimer) {
-                clearTimeout(autoRestartTimer);
-                autoRestartTimer = null;
-            }
-
+            if (autoRestartTimer) { clearTimeout(autoRestartTimer); autoRestartTimer = null; }
             board = Array(9).fill('');
             currentPlayer = 'X';
             gameOver = false;
             isAiThinking = false;
             historyX = [];
             historyO = [];
-
             renderBoard();
 
             if (mode === 'ai') {
@@ -497,17 +396,15 @@
                     gameOver: false,
                     winner: null,
                     winLine: null,
+                    historyX: [],
+                    historyO: [],
                     lastUpdate: Date.now()
                 });
             }
         }
 
-        /* ============================================================
-           落子（下三悔一）
-           ============================================================ */
         function placeMark(index, player) {
             const myHistory = player === 'X' ? historyX : historyO;
-
             if (myHistory.length >= 3) {
                 const oldestIndex = myHistory.shift();
                 board[oldestIndex] = '';
@@ -517,34 +414,22 @@
                 oldCell.className = 'cell fading';
                 setTimeout(() => oldCell.classList.remove('fading'), 360);
             }
-
             board[index] = player;
             cells[index].textContent = player;
             cells[index].className = 'cell taken ' + player.toLowerCase();
-
             myHistory.push(index);
         }
 
-        /* ============================================================
-           结束游戏
-           ============================================================ */
         function endGame(result) {
             gameOver = true;
-
             let winnerName;
             if (mode === 'ai' && result.winner === 'O') winnerName = 'AI';
             else if (mode === 'online') winnerName = result.winner === myRole ? '你' : '对方';
             else winnerName = `玩家 ${result.winner}`;
-
             updateStatus(`${winnerName} 获胜！`, 'win');
 
-            if (result.winner === 'X') {
-                scoreX++;
-                scoreXEl.textContent = scoreX;
-            } else {
-                scoreO++;
-                scoreOEl.textContent = scoreO;
-            }
+            if (result.winner === 'X') { scoreX++; scoreXEl.textContent = scoreX; }
+            else { scoreO++; scoreOEl.textContent = scoreO; }
 
             result.line.forEach(i => cells[i].classList.add('win'));
             updateCellStates();
@@ -556,6 +441,8 @@
                     gameOver: true,
                     winner: result.winner,
                     winLine: result.line,
+                    historyX: historyX,
+                    historyO: historyO,
                     lastUpdate: Date.now()
                 });
             }
@@ -569,6 +456,8 @@
                             gameOver: false,
                             winner: null,
                             winLine: null,
+                            historyX: [],
+                            historyO: [],
                             lastUpdate: Date.now()
                         });
                     } else {
@@ -578,22 +467,14 @@
             }
         }
 
-        /* ============================================================
-           玩家点击
-           ============================================================ */
         function handleClick(e) {
             const cell = e.currentTarget;
             const index = parseInt(cell.dataset.index, 10);
 
-            if (gameOver) return;
-            if (board[index] !== '') return;
-            if (isAiThinking) return;
-
+            if (gameOver || board[index] !== '' || isAiThinking) return;
             if (mode === 'online') {
-                if (!myRole) return;
-                if (currentPlayer !== myRole) return;
+                if (!myRole || currentPlayer !== myRole) return;
             }
-
             if (mode === 'ai' && currentPlayer === 'O') return;
 
             const player = currentPlayer;
@@ -603,18 +484,12 @@
             placeMark(index, player);
 
             const result = checkWinner(board);
-            if (result) {
-                endGame(result);
-                return;
-            }
+            if (result) { endGame(result); return; }
 
             if (willRemove) {
                 const nextName = player === 'X' ? 'O' : 'X';
-                if (mode === 'online') {
-                    updateStatus(`${player} 已下满三个 · 轮到 ${nextName}`, 'fade');
-                } else {
-                    updateStatus(`${player} 已下满三个 · 最早棋子已移除 · 轮到 ${nextName}`, 'fade');
-                }
+                if (mode === 'online') updateStatus(`${player} 已下满三个 · 轮到 ${nextName}`, 'fade');
+                else updateStatus(`${player} 已下满三个 · 最早棋子已移除 · 轮到 ${nextName}`, 'fade');
             }
 
             currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
@@ -626,11 +501,11 @@
                     gameOver: false,
                     winner: null,
                     winLine: null,
+                    historyX: historyX,
+                    historyO: historyO,
                     lastUpdate: Date.now()
                 });
-                if (!willRemove) {
-                    updateStatus(currentPlayer === myRole ? '你的回合' : '等待对方…', '');
-                }
+                if (!willRemove) updateStatus(currentPlayer === myRole ? '你的回合' : '等待对方…', '');
                 updateCellStates();
                 return;
             }
@@ -641,74 +516,44 @@
                 updateCellStates();
                 setTimeout(aiMove, 350);
             } else {
-                if (!willRemove) {
-                    updateStatus(`玩家 ${currentPlayer} 的回合`, '');
-                }
+                if (!willRemove) updateStatus(`玩家 ${currentPlayer} 的回合`, '');
                 updateCellStates();
             }
         }
 
-        /* ============================================================
-           AI 落子（Minimax）
-           ============================================================ */
         function aiMove() {
             if (gameOver) { isAiThinking = false; return; }
-
             const bestMove = getBestMove(board, 'O', historyO);
-
             if (bestMove !== -1) {
                 const willRemove = historyO.length >= 3;
                 placeMark(bestMove, 'O');
-
                 const result = checkWinner(board);
-                if (result) {
-                    isAiThinking = false;
-                    endGame(result);
-                    return;
-                }
-
+                if (result) { isAiThinking = false; endGame(result); return; }
                 currentPlayer = 'X';
-
-                if (willRemove) {
-                    updateStatus(`AI 已下满三个 · 最早棋子已移除 · 轮到玩家 X`, 'fade');
-                }
+                if (willRemove) updateStatus(`AI 已下满三个 · 最早棋子已移除 · 轮到玩家 X`, 'fade');
             }
-
             isAiThinking = false;
-            if (historyO.length < 3 || !willRemove) {
-                updateStatus('玩家 X 的回合', '');
-            }
+            if (historyO.length < 3 || !willRemove) updateStatus('玩家 X 的回合', '');
             updateCellStates();
         }
 
         function getBestMove(b, player, oHistory) {
-            let bestScore = -Infinity;
-            let bestMove = -1;
-
+            let bestScore = -Infinity, bestMove = -1;
             for (let i = 0; i < 9; i++) {
                 if (b[i] !== '') continue;
-
                 const newBoard = b.slice();
                 newBoard[i] = player;
-
                 let newOHistory = oHistory.slice();
                 if (player === 'O' && newOHistory.length >= 3) {
                     const oldest = newOHistory.shift();
                     newBoard[oldest] = '';
                 }
                 if (player === 'O') newOHistory.push(i);
-
                 const win = checkWinner(newBoard);
                 if (win && win.winner === 'O') return i;
-
                 const score = minimax(newBoard, 'X', newOHistory, false, 0);
-
-                if (score > bestScore) {
-                    bestScore = score;
-                    bestMove = i;
-                }
+                if (score > bestScore) { bestScore = score; bestMove = i; }
             }
-
             return bestMove;
         }
 
@@ -720,7 +565,6 @@
             }
             if (b.every(v => v !== '')) return 0;
             if (depth > 6) return 0;
-
             if (isMax) {
                 let best = -Infinity;
                 for (let i = 0; i < 9; i++) {
@@ -750,74 +594,45 @@
             }
         }
 
-        /* ============================================================
-           模式切换
-           ============================================================ */
         function setMode(newMode) {
             mode = newMode;
             modeBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.mode === mode));
-
             roomPanel.classList.toggle('active', mode === 'online');
-
-            if (mode !== 'online' && roomRef) {
-                leaveRoom();
-            }
+            if (mode !== 'online' && roomRef) leaveRoom();
 
             if (mode === 'online') {
                 roomActions.style.display = 'flex';
                 roomInputRow.style.display = 'none';
                 roomInfo.style.display = 'none';
-
-                if (!firebaseReady) {
-                    updateStatus('联机模式需要 Firebase，请先配置', 'error');
-                } else {
-                    updateStatus('请创建或加入房间', '');
-                }
+                if (!firebaseReady) updateStatus('联机需要 Firebase，请先配置', 'error');
+                else updateStatus('请创建或加入房间', '');
             } else {
                 initGame();
             }
         }
 
-        /* ============================================================
-           联机：生成房间码
-           ============================================================ */
         function generateRoomCode() {
             const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
             let code = '';
-            for (let i = 0; i < 6; i++) {
-                code += chars[Math.floor(Math.random() * chars.length)];
-            }
+            for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
             return code;
         }
 
-        /* ============================================================
-           联机：创建房间
-           ============================================================ */
         function createRoom() {
-            if (!firebaseReady) {
-                updateStatus('联机需要 Firebase，请先在代码里配置', 'error');
-                return;
-            }
-
+            if (!firebaseReady) { updateStatus('联机需要 Firebase，请先在代码里配置', 'error'); return; }
             const code = generateRoomCode();
-            myRoomCode = code;
-            myRole = 'X';
-            isHost = true;
-
+            myRoomCode = code; myRole = 'X'; isHost = true;
             roomRef = db.ref('rooms/' + code);
-
             roomRef.once('value', (snap) => {
-                if (snap.exists()) {
-                    createRoom();
-                    return;
-                }
-
+                if (snap.exists()) { createRoom(); return; }
                 roomRef.set({
                     board: Array(9).fill(''),
                     currentPlayer: 'X',
                     gameOver: false,
                     winner: null,
                     winLine: null,
+                    historyX: [],
+                    historyO: [],
                     createdAt: Date.now(),
                     lastUpdate: Date.now(),
                     players: { X: true, O: false }
@@ -835,39 +650,17 @@
             });
         }
 
-        /* ============================================================
-           联机：加入房间
-           ============================================================ */
         function joinRoom(code) {
-            if (!firebaseReady) {
-                updateStatus('联机需要 Firebase，请先在代码里配置', 'error');
-                return;
-            }
-
+            if (!firebaseReady) { updateStatus('联机需要 Firebase，请先在代码里配置', 'error'); return; }
             code = code.trim().toUpperCase();
-            if (code.length !== 6) {
-                updateStatus('房间码应为 6 位', 'error');
-                return;
-            }
-
+            if (code.length !== 6) { updateStatus('房间码应为 6 位', 'error'); return; }
             const ref = db.ref('rooms/' + code);
-
             ref.once('value', (snap) => {
-                if (!snap.exists()) {
-                    updateStatus('房间不存在', 'error');
-                    return;
-                }
-
+                if (!snap.exists()) { updateStatus('房间不存在', 'error'); return; }
                 const data = snap.val();
-                if (data.players && data.players.O) {
-                    updateStatus('房间已满', 'error');
-                    return;
-                }
+                if (data.players && data.players.O) { updateStatus('房间已满', 'error'); return; }
 
-                myRoomCode = code;
-                myRole = 'O';
-                isHost = false;
-                roomRef = ref;
+                myRoomCode = code; myRole = 'O'; isHost = false; roomRef = ref;
 
                 roomRef.update({
                     'players/O': true,
@@ -885,10 +678,10 @@
                             board = d.board || Array(9).fill('');
                             currentPlayer = d.currentPlayer || 'X';
                             gameOver = d.gameOver || false;
+                            historyX = d.historyX || [];
+                            historyO = d.historyO || [];
                             renderBoard();
-                            if (!gameOver) {
-                                updateStatus(currentPlayer === myRole ? '你的回合' : '等待对方…', '');
-                            }
+                            if (!gameOver) updateStatus(currentPlayer === myRole ? '你的回合' : '等待对方…', '');
                         }
                     });
 
@@ -897,16 +690,9 @@
             });
         }
 
-        /* ============================================================
-           联机：监听房间
-           ============================================================ */
         function listenToRoom() {
             if (!roomRef) return;
-
-            if (roomListener) {
-                roomRef.off('value', roomListener);
-            }
-
+            if (roomListener) roomRef.off('value', roomListener);
             roomListener = roomRef.on('value', (snap) => {
                 const data = snap.val();
                 if (!data) return;
@@ -916,6 +702,8 @@
                 const newGameOver = data.gameOver || false;
                 const newWinner = data.winner || null;
                 const newWinLine = data.winLine || null;
+                const newHistoryX = data.historyX || [];
+                const newHistoryO = data.historyO || [];
 
                 const boardChanged = JSON.stringify(newBoard) !== JSON.stringify(board);
                 const playerChanged = newCurrentPlayer !== currentPlayer;
@@ -924,6 +712,8 @@
                 board = newBoard;
                 currentPlayer = newCurrentPlayer;
                 gameOver = newGameOver;
+                historyX = newHistoryX;
+                historyO = newHistoryO;
 
                 if (boardChanged || playerChanged || gameOverChanged) {
                     renderBoard();
@@ -931,62 +721,36 @@
                     if (newGameOver && newWinner) {
                         const winnerName = newWinner === myRole ? '你' : '对方';
                         updateStatus(`${winnerName}（${newWinner}）获胜！`, 'win');
-                        if (newWinLine) {
-                            newWinLine.forEach(i => cells[i].classList.add('win'));
-                        }
+                        if (newWinLine) newWinLine.forEach(i => cells[i].classList.add('win'));
                         if (newWinner === 'X') { scoreX++; scoreXEl.textContent = scoreX; }
                         else { scoreO++; scoreOEl.textContent = scoreO; }
                     } else {
-                        if (newCurrentPlayer === myRole) {
-                            updateStatus('你的回合', '');
-                        } else {
-                            updateStatus('等待对方…', '');
-                        }
+                        if (newCurrentPlayer === myRole) updateStatus('你的回合', '');
+                        else updateStatus('等待对方…', '');
                     }
                     updateCellStates();
                 }
 
-                if (data.players) {
-                    if (isHost && data.players.O) {
-                        roomHint.textContent = '对方已加入 · 对战开始';
-                    }
+                if (data.players && isHost && data.players.O) {
+                    roomHint.textContent = '对方已加入 · 对战开始';
                 }
             });
         }
 
-        /* ============================================================
-           联机：离开房间
-           ============================================================ */
         function leaveRoom() {
             if (roomRef) {
-                if (isHost) {
-                    roomRef.remove();
-                } else {
-                    roomRef.update({ 'players/O': false, lastUpdate: Date.now() });
-                }
-
-                if (roomListener) {
-                    roomRef.off('value', roomListener);
-                    roomListener = null;
-                }
+                if (isHost) roomRef.remove();
+                else roomRef.update({ 'players/O': false, lastUpdate: Date.now() });
+                if (roomListener) { roomRef.off('value', roomListener); roomListener = null; }
             }
-
-            roomRef = null;
-            myRoomCode = null;
-            myRole = null;
-            isHost = false;
-
+            roomRef = null; myRoomCode = null; myRole = null; isHost = false;
             roomActions.style.display = 'flex';
             roomInputRow.style.display = 'none';
             roomInfo.style.display = 'none';
             updateStatus('已离开房间', '');
         }
 
-        /* ============================================================
-           事件绑定
-           ============================================================ */
         cells.forEach(cell => cell.addEventListener('click', handleClick));
-
         restartBtn.addEventListener('click', () => {
             if (mode === 'online') {
                 if (isHost && roomRef) {
@@ -996,34 +760,25 @@
                         gameOver: false,
                         winner: null,
                         winLine: null,
+                        historyX: [],
+                        historyO: [],
                         lastUpdate: Date.now()
                     });
                 }
-            } else {
-                initGame();
-            }
+            } else initGame();
         });
 
-        modeBtns.forEach(btn => {
-            btn.addEventListener('click', () => setMode(btn.dataset.mode));
-        });
-
+        modeBtns.forEach(btn => btn.addEventListener('click', () => setMode(btn.dataset.mode)));
         document.getElementById('createRoomBtn').addEventListener('click', createRoom);
-
         document.getElementById('joinRoomBtn').addEventListener('click', () => {
             roomActions.style.display = 'none';
             roomInputRow.style.display = 'flex';
             roomCodeInput.focus();
         });
-
-        document.getElementById('confirmJoinBtn').addEventListener('click', () => {
-            joinRoom(roomCodeInput.value);
-        });
-
+        document.getElementById('confirmJoinBtn').addEventListener('click', () => joinRoom(roomCodeInput.value));
         roomCodeInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') joinRoom(roomCodeInput.value);
         });
-
         roomCodeDisplay.addEventListener('click', () => {
             if (myRoomCode) {
                 navigator.clipboard.writeText(myRoomCode).then(() => {
@@ -1043,7 +798,6 @@
                 });
             }
         });
-
         document.getElementById('leaveRoomBtn').addEventListener('click', leaveRoom);
 
         initGame();
