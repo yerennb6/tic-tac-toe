@@ -37,6 +37,9 @@
         .game-btn.active { color: #fff; background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.4); }
         .mode-btn { padding: 6px 14px; border-radius: 30px; border: none; font-size: 0.75rem; font-weight: 600; color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; outline: none; }
         .mode-btn.active { color: #fff; background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.35); }
+        .mode-btn.author { color: #ffd700; border-color: rgba(255, 215, 0, 0.4); }
+        .mode-btn.author.active { color: #fff; background: linear-gradient(135deg, #ffb700, #ff6b00); border-color: #ffd700; box-shadow: 0 0 16px rgba(255, 180, 0, 0.6); }
+        .settings-btn { color: #a0c8ff; border-color: rgba(160, 200, 255, 0.3); }
         .size-btn { padding: 5px 12px; border-radius: 20px; border: none; font-size: 0.7rem; font-weight: 600; color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; outline: none; }
         .size-btn.active { color: #fff; background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.35); }
 
@@ -44,31 +47,16 @@
         .status.win { color: #7ee0a0; font-weight: 600; }
         .status.thinking { color: #8fb8ff; }
         .status.error { color: #ff8f8f; }
+        .status.gold { color: #ffd700; font-weight: 600; }
 
-        .board-area {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 200px;
-        }
+        .board-area { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 200px; }
 
-        /* 比分栏 */
-        .score-board {
-            display: flex;
-            justify-content: center;
-            gap: 32px;
-            margin-bottom: 10px;
-            font-size: 0.72rem;
-            color: rgba(255,255,255,0.65);
-            letter-spacing: 1px;
-        }
+        .score-board { display: flex; justify-content: center; gap: 32px; margin-bottom: 10px; font-size: 0.72rem; color: rgba(255,255,255,0.65); letter-spacing: 1px; }
         .score-item { display: flex; flex-direction: column; align-items: center; gap: 2px; }
         .score-item span { font-weight: 700; font-size: 1.3rem; color: #fff; }
         .score-item.black-score span { color: #6cb8ff; }
         .score-item.white-score span { color: #ff8fb0; }
 
-        /* 井字棋 */
         .board-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; width: min(65vw, 260px); margin: 0 auto 14px; }
         .cell { aspect-ratio: 1/1; border-radius: 16px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); display: flex; justify-content: center; align-items: center; font-size: 2.4rem; font-weight: 700; cursor: pointer; color: transparent; transition: all 0.15s; }
         .cell:hover:not(.taken):not(.disabled) { background: rgba(255,255,255,0.18); }
@@ -80,7 +68,6 @@
         .cell.win.x { color: #8affb0; }
         .cell.win.o { color: #ffb0c8; }
 
-        /* 五子棋 */
         .board-5 { display: grid; grid-template-columns: repeat(15,1fr); gap: 1px; width: min(92vw, 380px); margin: 0 auto 12px; background: #c8a878; border-radius: 6px; padding: 4px; }
         .cell-5 { aspect-ratio: 1/1; background: #d8bc90; display: flex; justify-content: center; align-items: center; cursor: pointer; position: relative; }
         .cell-5::after { content: ''; position: absolute; inset: 0; border: 0.5px solid rgba(80,50,20,0.4); pointer-events: none; }
@@ -89,7 +76,6 @@
         .cell-5 .stone.white { background: radial-gradient(circle at 35% 35%, #fff, #bbb); box-shadow: 0 1px 3px rgba(0,0,0,0.4); }
         .cell-5.last-move { box-shadow: inset 0 0 0 2px rgba(255,200,0,0.8); }
 
-        /* 跳棋 */
         .board-checkers { display: grid; grid-template-columns: repeat(8, 1fr); width: min(88vw, 340px); margin: 0 auto 12px; background: #3a2a1a; border-radius: 8px; padding: 6px; gap: 2px; }
         .cell-check { aspect-ratio: 1/1; display: flex; justify-content: center; align-items: center; position: relative; border-radius: 4px; cursor: pointer; }
         .cell-check.light { background: #e8d8b0; }
@@ -103,7 +89,6 @@
         .cell-check.valid-move { box-shadow: inset 0 0 0 3px rgba(126,224,160,0.9); }
         .cell-check.last-move { box-shadow: inset 0 0 0 3px rgba(255,100,100,0.9); }
 
-        /* 围棋 */
         .board-go {
             display: grid;
             width: min(92vw, 520px);
@@ -130,6 +115,7 @@
         .btn:hover { background: rgba(255,255,255,0.2); }
         .btn:active { transform: scale(0.96); }
         .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .btn.gold { background: linear-gradient(135deg, #ffb700, #ff6b00); border-color: #ffd700; box-shadow: 0 0 16px rgba(255, 180, 0, 0.5); }
 
         .room-panel { display: none; flex-direction: column; gap: 8px; }
         .room-panel.active { display: flex; }
@@ -141,27 +127,79 @@
         .room-input-row { display: flex; gap: 8px; justify-content: center; }
         .hidden { display: none !important; }
 
-        /* ===== 胜利动画 ===== */
-        .board-area.win-glow {
-            animation: winGlow 1.2s ease-in-out infinite alternate;
+        /* 弹窗（卡密 / 作者选边） */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.75);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
         }
+        .modal-overlay.active { display: flex; }
+        .modal {
+            background: #1a1f2b;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 24px;
+            padding: 24px 20px;
+            max-width: 380px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px -10px rgba(0,0,0,0.9);
+            animation: modalIn 0.3s ease;
+        }
+        @keyframes modalIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .modal h3 { font-size: 1.15rem; color: #fff; margin-bottom: 6px; letter-spacing: 1px; }
+        .modal p { font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-bottom: 14px; }
+        .modal input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 40px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            font-size: 1rem;
+            text-align: center;
+            letter-spacing: 2px;
+            outline: none;
+            margin-bottom: 14px;
+        }
+        .modal input:focus { border-color: #ffd700; }
+        .modal .modal-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        .modal .modal-btns button {
+            padding: 10px 22px;
+            border-radius: 40px;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .modal .modal-btns .btn-cancel { background: rgba(255,255,255,0.1); color: #fff; }
+        .modal .modal-btns .btn-confirm { background: linear-gradient(135deg, #ffb700, #ff6b00); color: #fff; }
+        .modal .modal-btns button:active { transform: scale(0.95); }
+
+        /* 胜利动画 */
+        .board-area.win-glow { animation: winGlow 1.2s ease-in-out infinite alternate; }
         @keyframes winGlow {
             0% { filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.5)); }
             100% { filter: drop-shadow(0 0 24px rgba(255, 215, 0, 1)); }
         }
-
         .win-text {
-            position: fixed;
-            top: 42%;
-            left: 50%;
+            position: fixed; top: 42%; left: 50%;
             transform: translate(-50%, -50%) scale(0);
-            font-size: 2.8rem;
-            font-weight: 900;
-            letter-spacing: 6px;
+            font-size: 2.8rem; font-weight: 900; letter-spacing: 6px;
             color: #ffd700;
             text-shadow: 0 0 20px rgba(255,215,0,0.9), 0 0 40px rgba(255,150,0,0.7);
-            z-index: 9999;
-            pointer-events: none;
+            z-index: 9999; pointer-events: none;
             animation: winPop 1.5s ease forwards;
         }
         @keyframes winPop {
@@ -170,14 +208,9 @@
             60% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
             100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
         }
-
         .confetti {
-            position: fixed;
-            width: 8px;
-            height: 14px;
-            top: -20px;
-            z-index: 9998;
-            pointer-events: none;
+            position: fixed; width: 8px; height: 14px; top: -20px;
+            z-index: 9998; pointer-events: none;
             animation: confettiFall linear forwards;
         }
         @keyframes confettiFall {
@@ -211,6 +244,8 @@
             <div class="mode-switch" id="modeSwitch">
                 <button class="mode-btn active" data-mode="ai">人机</button>
                 <button class="mode-btn" data-mode="online">联机</button>
+                <button class="mode-btn author hidden" id="authorBtn" data-mode="author">作者</button>
+                <button class="mode-btn settings-btn" id="settingsBtn">⚙ 设置</button>
             </div>
 
             <div class="go-size-switch hidden" id="goSizeSwitch">
@@ -269,6 +304,32 @@
         </div>
     </div>
 
+    <!-- 卡密输入弹窗 -->
+    <div class="modal-overlay" id="keyModal">
+        <div class="modal">
+            <h3>🔑 输入卡密</h3>
+            <p>输入正确的卡密以解锁作者功能</p>
+            <input type="password" id="keyInput" placeholder="请输入卡密" autocomplete="off">
+            <div class="modal-btns">
+                <button class="btn-cancel" id="keyCancel">取消</button>
+                <button class="btn-confirm" id="keyConfirm">解锁</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 作者模式选边弹窗 -->
+    <div class="modal-overlay" id="authorModal">
+        <div class="modal">
+            <h3>🎮 作者模式</h3>
+            <p>选择 AI 帮你下哪一边</p>
+            <div class="modal-btns">
+                <button class="btn-cancel" id="authorCancel">取消</button>
+                <button class="btn-confirm" id="chooseBlack">AI 执黑</button>
+                <button class="btn-confirm" id="chooseWhite">AI 执白</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
@@ -288,7 +349,7 @@
         const statusEl = document.getElementById('status');
         const restartBtn = document.getElementById('restart');
         const gameBtns = document.querySelectorAll('.game-btn');
-        const modeBtns = document.querySelectorAll('.mode-btn');
+        const modeBtns = document.querySelectorAll('.mode-btn[data-mode]');
         const sizeBtns = document.querySelectorAll('.size-btn');
         const board3El = document.getElementById('board3');
         const board5El = document.getElementById('board5');
@@ -300,9 +361,10 @@
         const blackCaptureEl = document.getElementById('blackCapture');
         const whiteCaptureEl = document.getElementById('whiteCapture');
         const boardArea = document.getElementById('boardArea');
-
         const scoreBlackEl = document.getElementById('scoreBlack');
         const scoreWhiteEl = document.getElementById('scoreWhite');
+        const authorBtn = document.getElementById('authorBtn');
+        const settingsBtn = document.getElementById('settingsBtn');
 
         const roomPanel = document.getElementById('roomPanel');
         const roomActions = document.getElementById('roomActions');
@@ -311,6 +373,22 @@
         const roomInfo = document.getElementById('roomInfo');
         const roomCodeDisplay = document.getElementById('roomCodeDisplay');
         const roomHint = document.getElementById('roomHint');
+
+        const keyModal = document.getElementById('keyModal');
+        const keyInput = document.getElementById('keyInput');
+        const authorModal = document.getElementById('authorModal');
+
+        // 卡密
+        const SECRET_KEY = 'xingmonb';
+        let unlocked = false;
+        // 作者模式：AI 执哪边（'X' 或 'O'）
+        let authorSide = 'X';
+
+        try {
+            if (localStorage.getItem('chessUnlocked') === '1') {
+                unlocked = true;
+            }
+        } catch(e) {}
 
         let gameType = 'ttt';
         let mode = 'ai';
@@ -343,6 +421,10 @@
             boardGoEl.classList.toggle('hidden', type !== 'go');
             goInfo.classList.toggle('hidden', type !== 'go');
             goSizeSwitch.classList.toggle('hidden', type !== 'go');
+        }
+        function updateAuthorBtn() {
+            if (unlocked) authorBtn.classList.remove('hidden');
+            else authorBtn.classList.add('hidden');
         }
         function initCheckersBoard() {
             boardCheckers = Array(64).fill(null);
@@ -521,17 +603,29 @@
             historyX = []; historyO = [];
             selectedCheckers = -1; validCheckersTargets = [];
             renderBoard();
+
             if (mode === 'ai') updateStatus('黑棋（X）先手', '');
+            else if (mode === 'author') {
+                updateStatus(`作者模式 · AI 执${authorSide === 'X' ? '黑' : '白'}`, 'gold');
+                // 如果 AI 执黑，AI 先下
+                if (authorSide === 'X') setTimeout(authorMove, 400);
+            }
             else if (mode === 'online') {
                 if (myRole) updateStatus(`你是 ${myRole === 'X' ? '黑棋' : '白棋'} · ${currentPlayer === myRole ? '你的回合' : '等待对方…'}`, '');
                 else updateStatus('请创建或加入房间', '');
             }
             if (mode === 'online' && !skipNetwork && isHost && roomRef) syncRoom();
         }
+        // 玩家能点的颜色（作者模式下要排除 AI 的颜色）
+        function playerCanClick(player) {
+            if (mode === 'author' && player === authorSide) return false;
+            return true;
+        }
         function handleCellClick3(index) {
             if (gameOver || board3[index] !== '' || isAiThinking) return;
             if (mode === 'online') { if (!myRole || currentPlayer !== myRole) return; }
             if (mode === 'ai' && currentPlayer === 'O') return;
+            if (!playerCanClick(currentPlayer)) return;
             doMove3(index);
         }
         function doMove3(index) {
@@ -551,6 +645,7 @@
             if (gameOver || board5[index] !== '' || isAiThinking) return;
             if (mode === 'online') { if (!myRole || currentPlayer !== myRole) return; }
             if (mode === 'ai' && currentPlayer === 'O') return;
+            if (!playerCanClick(currentPlayer)) return;
             const player = currentPlayer;
             board5[index] = player;
             lastMove = index;
@@ -565,6 +660,7 @@
             if (gameOver || isAiThinking) return;
             if (mode === 'online') { if (!myRole || currentPlayer !== myRole) return; }
             if (mode === 'ai' && currentPlayer === 'O') return;
+            if (!playerCanClick(currentPlayer)) return;
             const p = boardCheckers[index];
             const myColor = currentPlayer === 'X' ? 'black' : 'red';
             if (p && p.color === myColor) {
@@ -610,6 +706,7 @@
             if (gameOver || boardGo[index] !== '' || isAiThinking) return;
             if (mode === 'online') { if (!myRole || currentPlayer !== myRole) return; }
             if (mode === 'ai' && currentPlayer === 'O') return;
+            if (!playerCanClick(currentPlayer)) return;
             const player = currentPlayer;
             const test = boardGo.slice();
             test[index] = player;
@@ -635,6 +732,13 @@
             afterMove();
         }
         function afterMove() {
+            // 作者模式：如果是 AI 的回合，自动下
+            if (mode === 'author' && currentPlayer === authorSide && !gameOver) {
+                isAiThinking = true;
+                updateStatus(`作者 AI 执${authorSide === 'X' ? '黑' : '白'}思考中…`, 'thinking');
+                setTimeout(authorMove, 400);
+                return;
+            }
             if (mode === 'online') {
                 syncRoom();
                 updateStatus(currentPlayer === myRole ? '你的回合' : '等待对方…', '');
@@ -703,6 +807,289 @@
             isAiThinking = false;
             updateStatus('轮到 黑棋', '');
         }
+
+        /* ============================================================
+           作者模式 · 超强 AI（帮 authorSide 下棋）
+           ============================================================ */
+        function authorMove() {
+            if (gameOver) { isAiThinking = false; return; }
+            const me = authorSide;
+            let move = -1;
+
+            if (gameType === 'ttt') {
+                move = authorBestTTT(board3, me);
+                if (move !== -1) {
+                    isAiThinking = false;
+                    const myHist = me === 'X' ? historyX : historyO;
+                    if (myHist.length >= 3) { const old = myHist.shift(); board3[old] = ''; }
+                    board3[move] = me;
+                    myHist.push(move);
+                    lastMove = move;
+                    const r = checkWinner3(board3);
+                    renderBoard();
+                    if (mode === 'online' && roomRef) syncRoom();
+                    if (r) { endGame(r); return; }
+                    currentPlayer = me === 'X' ? 'O' : 'X';
+                    updateStatus(mode === 'online' ? '等待对方…' : `轮到 ${currentPlayer === 'X' ? '黑棋（你）' : '白棋（你）'}`, '');
+                    return;
+                }
+            } else if (gameType === 'gomoku') {
+                move = authorBestGomoku(board5, me);
+                if (move !== -1) {
+                    isAiThinking = false;
+                    board5[move] = me;
+                    lastMove = move;
+                    const r = checkWinner5(board5);
+                    renderBoard();
+                    if (mode === 'online' && roomRef) syncRoom();
+                    if (r) { endGame(r); return; }
+                    currentPlayer = me === 'X' ? 'O' : 'X';
+                    updateStatus(mode === 'online' ? '等待对方…' : `轮到 ${currentPlayer === 'X' ? '黑棋（你）' : '白棋（你）'}`, '');
+                    return;
+                }
+            } else if (gameType === 'checkers') {
+                const color = me === 'X' ? 'black' : 'red';
+                move = authorBestCheckers(boardCheckers, color);
+                if (move) {
+                    isAiThinking = false;
+                    const piece = boardCheckers[move.from];
+                    boardCheckers[move.from] = null;
+                    if (move.capture) {
+                        const mx = (move.from % 8 + move.to % 8) / 2;
+                        const my = (Math.floor(move.from / 8) + Math.floor(move.to / 8)) / 2;
+                        boardCheckers[my*8+mx] = null;
+                    }
+                    const ny = Math.floor(move.to / 8);
+                    let np = { color: piece.color, king: piece.king };
+                    if (!piece.king) {
+                        if (piece.color === 'red' && ny === 0) np.king = true;
+                        if (piece.color === 'black' && ny === 7) np.king = true;
+                    }
+                    boardCheckers[move.to] = np;
+                    lastMove = move.to;
+                    renderBoard();
+                    if (mode === 'online' && roomRef) syncRoom();
+                    const oppColor = color === 'black' ? 'red' : 'black';
+                    if (!boardCheckers.some(p => p && p.color === oppColor)) {
+                        endGame({ winner: me, line: null }); return;
+                    }
+                    currentPlayer = me === 'X' ? 'O' : 'X';
+                    updateStatus(mode === 'online' ? '等待对方…' : `轮到 ${currentPlayer === 'X' ? '黑棋（你）' : '白棋（你）'}`, '');
+                    return;
+                }
+            } else if (gameType === 'go') {
+                move = authorBestGo(boardGo, me, GO_SIZE);
+                if (move >= 0) {
+                    isAiThinking = false;
+                    boardGo[move] = me;
+                    const cap = tryCapture(boardGo, me, GO_SIZE);
+                    if (cap > 0) {
+                        if (me === 'X') { goCaptures.X += cap; blackCaptureEl.textContent = goCaptures.X; }
+                        else { goCaptures.O += cap; whiteCaptureEl.textContent = goCaptures.O; }
+                    }
+                    lastMove = move;
+                    renderBoard();
+                    if (mode === 'online' && roomRef) syncRoom();
+                    currentPlayer = me === 'X' ? 'O' : 'X';
+                    updateStatus(mode === 'online' ? '等待对方…' : `轮到 ${currentPlayer === 'X' ? '黑棋（你）' : '白棋（你）'}`, '');
+                    return;
+                }
+            }
+            isAiThinking = false;
+        }
+
+        function authorBestTTT(b, me) {
+            const opp = me === 'X' ? 'O' : 'X';
+            if (b.every(v => v === '')) return 4;
+            let bestScore = -Infinity, bestMove = -1;
+            for (let i = 0; i < 9; i++) {
+                if (b[i] !== '') continue;
+                const nb = b.slice(); nb[i] = me;
+                const s = tttMinimax(nb, false, 0, me, opp);
+                if (s > bestScore) { bestScore = s; bestMove = i; }
+            }
+            return bestMove;
+        }
+        function tttMinimax(b, isMax, depth, me, opp) {
+            const w = checkWinner3(b);
+            if (w) {
+                if (w.winner === me) return 10 - depth;
+                if (w.winner === opp) return depth - 10;
+                if (w.winner === 'draw') return 0;
+            }
+            if (isMax) {
+                let best = -Infinity;
+                for (let i = 0; i < 9; i++) {
+                    if (b[i] !== '') continue;
+                    const nb = b.slice(); nb[i] = me;
+                    best = Math.max(best, tttMinimax(nb, false, depth + 1, me, opp));
+                }
+                return best;
+            } else {
+                let best = Infinity;
+                for (let i = 0; i < 9; i++) {
+                    if (b[i] !== '') continue;
+                    const nb = b.slice(); nb[i] = opp;
+                    best = Math.min(best, tttMinimax(nb, true, depth + 1, me, opp));
+                }
+                return best;
+            }
+        }
+
+        function authorBestGomoku(b, me) {
+            const opp = me === 'X' ? 'O' : 'X';
+            const n = SIZE_5;
+            for (let i = 0; i < n*n; i++) {
+                if (b[i] !== '') continue;
+                b[i] = me; const w = checkWinner5(b); b[i] = '';
+                if (w?.winner === me) return i;
+            }
+            for (let i = 0; i < n*n; i++) {
+                if (b[i] !== '') continue;
+                b[i] = opp; const w = checkWinner5(b); b[i] = '';
+                if (w?.winner === opp) return i;
+            }
+            const stoneCount = b.filter(v => v !== '').length;
+            let depth = 4;
+            if (stoneCount < 6) depth = 5;
+            if (stoneCount < 2) depth = 6;
+
+            const candidates = getCandidates(b);
+            candidates.sort((a, c) => {
+                const sa = scorePosQuick(b, a, me) * 1.1 + scorePosQuick(b, a, opp);
+                const sc = scorePosQuick(b, c, me) * 1.1 + scorePosQuick(b, c, opp);
+                return sc - sa;
+            });
+            const limit = stoneCount < 4 ? 20 : 14;
+            const top = candidates.slice(0, limit);
+
+            let bestMove = top[0], bestScore = -Infinity;
+            for (const i of top) {
+                b[i] = me;
+                const s = authorMinimax5(b, depth - 1, -Infinity, Infinity, false, me, opp);
+                b[i] = '';
+                if (s > bestScore) { bestScore = s; bestMove = i; }
+            }
+            return bestMove;
+        }
+        function authorMinimax5(b, depth, alpha, beta, isMax, me, opp) {
+            const win = checkWinner5(b);
+            if (win) {
+                if (win.winner === me) return 100000000 - (10 - depth) * 10000;
+                if (win.winner === opp) return -100000000 + (10 - depth) * 10000;
+            }
+            if (depth === 0) return evaluateBoard(b, me) * 1.5 - evaluateBoard(b, opp);
+            let candidates = getCandidates(b);
+            if (candidates.length > 12) {
+                candidates.sort((a, c) => {
+                    const sa = scorePosQuick(b, a, me) * 1.1 + scorePosQuick(b, a, opp);
+                    const sc = scorePosQuick(b, c, me) * 1.1 + scorePosQuick(b, c, opp);
+                    return sc - sa;
+                });
+                candidates.length = 12;
+            }
+            if (isMax) {
+                let best = -Infinity;
+                for (const i of candidates) {
+                    b[i] = me;
+                    const s = authorMinimax5(b, depth - 1, alpha, beta, false, me, opp);
+                    b[i] = '';
+                    best = Math.max(best, s);
+                    alpha = Math.max(alpha, s);
+                    if (beta <= alpha) break;
+                }
+                return best;
+            } else {
+                let best = Infinity;
+                for (const i of candidates) {
+                    b[i] = opp;
+                    const s = authorMinimax5(b, depth - 1, alpha, beta, true, me, opp);
+                    b[i] = '';
+                    best = Math.min(best, s);
+                    beta = Math.min(beta, s);
+                    if (beta <= alpha) break;
+                }
+                return best;
+            }
+        }
+
+        function authorBestCheckers(b, color) {
+            const allMoves = [];
+            for (let i = 0; i < 64; i++) {
+                if (b[i] && b[i].color === color) {
+                    allMoves.push(...getCheckersMoves(b, i, color));
+                }
+            }
+            if (allMoves.length === 0) return null;
+            const captures = allMoves.filter(m => m.capture);
+            if (captures.length) return captures[Math.floor(Math.random() * captures.length)];
+            let bestMove = allMoves[0], bestScore = -Infinity;
+            for (const m of allMoves) {
+                const nb = b.slice();
+                const piece = nb[m.from];
+                nb[m.from] = null;
+                if (m.capture) {
+                    const mx = (m.from % 8 + m.to % 8) / 2;
+                    const my = (Math.floor(m.from / 8) + Math.floor(m.to / 8)) / 2;
+                    nb[my*8+mx] = null;
+                }
+                const ny = Math.floor(m.to / 8);
+                let np = { color: piece.color, king: piece.king };
+                if (!piece.king && piece.color === 'black' && ny === 7) np.king = true;
+                if (!piece.king && piece.color === 'red' && ny === 0) np.king = true;
+                nb[m.to] = np;
+                const s = checkersEval(nb, color);
+                if (s > bestScore) { bestScore = s; bestMove = m; }
+            }
+            return bestMove;
+        }
+        function checkersEval(b, color) {
+            let score = 0;
+            for (let i = 0; i < 64; i++) {
+                if (!b[i]) continue;
+                const p = b[i];
+                const val = p.king ? 5 : 3;
+                if (p.color === color) {
+                    score += val;
+                    const y = Math.floor(i / 8);
+                    if (p.color === 'black') score += y * 0.3;
+                    else score += (7 - y) * 0.3;
+                } else {
+                    score -= val;
+                }
+            }
+            return score;
+        }
+
+        function authorBestGo(b, me, size) {
+            const opp = me === 'X' ? 'O' : 'X';
+            const candidates = [];
+            for (let i = 0; i < size*size; i++) if (b[i] === '') candidates.push(i);
+            if (candidates.length === 0) return -1;
+            for (const i of candidates) {
+                const test = b.slice();
+                test[i] = me;
+                const captured = tryCapture(test, me, size);
+                if (captured > 0) {
+                    const { libs } = getGroupAndLibs(test, i, size);
+                    if (libs.size > 0) return i;
+                }
+            }
+            const n = size;
+            const center = Math.floor(n / 2);
+            const starPts = [
+                center * n + center,
+                (center - 2) * n + (center - 2),
+                (center - 2) * n + (center + 2),
+                (center + 2) * n + (center - 2),
+                (center + 2) * n + (center + 2)
+            ];
+            for (const sp of starPts) {
+                if (sp >= 0 && sp < n*n && b[sp] === '') return sp;
+            }
+            return candidates[Math.floor(Math.random() * candidates.length)];
+        }
+
         function getBestTTT(b) {
             for (let i = 0; i < 9; i++) { if (b[i] === '') { const nb = b.slice(); nb[i] = 'O'; if (checkWinner3(nb)?.winner === 'O') return i; } }
             for (let i = 0; i < 9; i++) { if (b[i] === '') { const nb = b.slice(); nb[i] = 'X'; if (checkWinner3(nb)?.winner === 'X') return i; } }
@@ -907,16 +1294,16 @@
                 updateStatus('平局！', 'win');
             } else {
                 let name;
-                if (mode === 'ai' && result.winner === 'O') name = 'AI';
+                if (mode === 'author') {
+                    name = result.winner === authorSide ? 'AI' : '你';
+                } else if (mode === 'ai' && result.winner === 'O') name = 'AI';
                 else if (mode === 'online') name = result.winner === myRole ? '你' : '对方';
                 else name = result.winner === 'X' ? '黑棋' : '白棋';
                 updateStatus(`${name} 获胜！`, 'win');
 
-                // 记录胜场
                 if (result.winner === 'X') { scoreBlack++; scoreBlackEl.textContent = scoreBlack; }
                 else { scoreWhite++; scoreWhiteEl.textContent = scoreWhite; }
 
-                // 胜利动画
                 playWinAnimation();
             }
             renderBoard();
@@ -928,21 +1315,14 @@
                 }, 2200);
             }
         }
-
-        /* ===== 胜利动画 ===== */
         function playWinAnimation() {
-            // 1. 棋盘发光
             boardArea.classList.add('win-glow');
             setTimeout(() => boardArea.classList.remove('win-glow'), 2200);
-
-            // 2. 胜利文字
             const winText = document.createElement('div');
             winText.className = 'win-text';
             winText.textContent = '胜利！';
             document.body.appendChild(winText);
             setTimeout(() => winText.remove(), 1600);
-
-            // 3. 撒花粒子
             const colors = ['#ff6b6b', '#ffd93d', '#6bcbff', '#7ee0a0', '#ff8fb0', '#c084fc'];
             for (let i = 0; i < 60; i++) {
                 const confetti = document.createElement('div');
@@ -956,7 +1336,6 @@
                 setTimeout(() => confetti.remove(), 3500);
             }
         }
-
         function setGame(newGame) {
             gameType = newGame;
             gameBtns.forEach(b => b.classList.toggle('active', b.dataset.game === gameType));
@@ -965,15 +1344,24 @@
             else initGame(true);
         }
         function setMode(newMode) {
+            // 作者模式：如果未解锁，不允许切换
+            if (newMode === 'author' && !unlocked) {
+                updateStatus('请先输入卡密解锁', 'error');
+                return;
+            }
             mode = newMode;
             modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
             roomPanel.classList.toggle('active', mode === 'online');
+
             if (mode !== 'online' && roomRef) leaveRoom();
             if (mode === 'online') {
                 roomActions.style.display = 'flex';
                 roomInputRow.classList.add('hidden');
                 roomInfo.classList.add('hidden');
                 updateStatus(firebaseReady ? '请创建或加入房间' : '联机需要 Firebase', firebaseReady ? '' : 'error');
+            } else if (mode === 'author') {
+                // 弹出选边弹窗
+                authorModal.classList.add('active');
             } else {
                 initGame();
             }
@@ -1113,6 +1501,8 @@
             roomInfo.classList.add('hidden');
             updateStatus('已离开房间', '');
         }
+
+        // ===== 事件 =====
         cells3.forEach(cell => cell.addEventListener('click', () => handleCellClick3(parseInt(cell.dataset.index, 10))));
         gameBtns.forEach(btn => btn.addEventListener('click', () => setGame(btn.dataset.game)));
         modeBtns.forEach(btn => btn.addEventListener('click', () => setMode(btn.dataset.mode)));
@@ -1132,6 +1522,65 @@
         roomCodeInput.addEventListener('keydown', e => { if (e.key === 'Enter') joinRoom(roomCodeInput.value); });
         roomCodeDisplay.addEventListener('click', () => { if (myRoomCode) navigator.clipboard.writeText(myRoomCode).catch(()=>{}); });
 
+        // 设置 / 卡密
+        settingsBtn.addEventListener('click', () => {
+            if (unlocked) {
+                if (confirm('已解锁作者模式，是否锁定？')) {
+                    unlocked = false;
+                    try { localStorage.removeItem('chessUnlocked'); } catch(e) {}
+                    updateAuthorBtn();
+                    if (mode === 'author') setMode('ai');
+                    updateStatus('已锁定作者模式', '');
+                }
+                return;
+            }
+            keyInput.value = '';
+            keyModal.classList.add('active');
+            setTimeout(() => keyInput.focus(), 100);
+        });
+        document.getElementById('keyCancel').addEventListener('click', () => {
+            keyModal.classList.remove('active');
+        });
+        document.getElementById('keyConfirm').addEventListener('click', () => {
+            const v = keyInput.value.trim();
+            if (v === SECRET_KEY) {
+                unlocked = true;
+                try { localStorage.setItem('chessUnlocked', '1'); } catch(e) {}
+                updateAuthorBtn();
+                keyModal.classList.remove('active');
+                updateStatus('✓ 卡密正确，作者模式已解锁', 'gold');
+            } else {
+                updateStatus('卡密错误', 'error');
+            }
+        });
+        keyInput.addEventListener('keydown', e => {
+            if (e.key === 'Enter') document.getElementById('keyConfirm').click();
+        });
+
+        // 作者选边
+        document.getElementById('authorCancel').addEventListener('click', () => {
+            authorModal.classList.remove('active');
+            // 取消 → 切回人机
+            mode = 'ai';
+            modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === 'ai'));
+            initGame();
+        });
+        document.getElementById('chooseBlack').addEventListener('click', () => {
+            authorSide = 'X';
+            authorModal.classList.remove('active');
+            initGame();
+            updateStatus('作者模式 · AI 执黑，你执白', 'gold');
+        });
+        document.getElementById('chooseWhite').addEventListener('click', () => {
+            authorSide = 'O';
+            authorModal.classList.remove('active');
+            initGame();
+            updateStatus('作者模式 · AI 执白，你执黑', 'gold');
+            // AI 执白，玩家执黑先手，等玩家下
+        });
+
+        // 启动
+        updateAuthorBtn();
         showBoard(gameType);
         initGame();
     </script>
