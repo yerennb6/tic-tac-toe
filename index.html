@@ -208,7 +208,6 @@
         .score .x-score span { color: #6cb8ff; }
         .score .o-score span { color: #ff8fb0; }
 
-        /* 房间面板 */
         .room-panel {
             display: none;
             flex-direction: column;
@@ -292,13 +291,11 @@
         <h1>井字棋</h1>
         <div class="rule-tip">✦ 每人下满三个悔一个 · 三连获胜 ✦</div>
 
-        <!-- 模式切换（只有人机和联机） -->
         <div class="mode-switch" id="modeSwitch">
             <button class="mode-btn active" data-mode="ai">人机对战</button>
             <button class="mode-btn" data-mode="online">联机对战</button>
         </div>
 
-        <!-- 房间面板 -->
         <div class="room-panel" id="roomPanel">
             <div class="room-actions" id="roomActions">
                 <button class="btn" id="createRoomBtn">创建房间</button>
@@ -337,25 +334,24 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
     <script>
         /* ============================================================
-           1. Firebase 配置 — 替换成你自己的！
+           Firebase 配置 — 已填入你的项目
            ============================================================ */
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT.firebaseapp.com",
-            databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-            projectId: "YOUR_PROJECT",
-            storageBucket: "YOUR_PROJECT.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyBsw0bf6kVPwaU7kyiAgSkXSNvp8ToDJ6E",
+            authDomain: "xingmo-e6636.firebaseapp.com",
+            databaseURL: "https://xingmo-e6636-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "xingmo-e6636",
+            storageBucket: "xingmo-e6636.firebasestorage.app",
+            messagingSenderId: "459070467362",
+            appId: "1:459070467362:web:f7a1640de869b73451097b",
+            measurementId: "G-BFTC9QCSYL"
         };
 
-        // 判断 Firebase 是否已配置
         const firebaseConfigured = firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY";
 
         let db = null;
@@ -371,7 +367,7 @@
         }
 
         /* ============================================================
-           2. 游戏状态
+           游戏状态
            ============================================================ */
         const statusEl = document.getElementById('status');
         const restartBtn = document.getElementById('restart');
@@ -396,7 +392,7 @@
         let board = Array(9).fill('');
         let currentPlayer = 'X';
         let gameOver = false;
-        let mode = 'ai'; // 'ai' | 'online'
+        let mode = 'ai';
         let isAiThinking = false;
         let scoreX = 0, scoreO = 0;
 
@@ -405,7 +401,6 @@
 
         let autoRestartTimer = null;
 
-        // 联机状态
         let myRole = null;
         let myRoomCode = null;
         let roomRef = null;
@@ -413,7 +408,7 @@
         let isHost = false;
 
         /* ============================================================
-           3. 工具函数
+           工具函数
            ============================================================ */
         function updateStatus(text, className) {
             statusEl.textContent = text;
@@ -468,7 +463,7 @@
         }
 
         /* ============================================================
-           4. 初始化
+           初始化
            ============================================================ */
         function initGame(skipNetwork) {
             if (autoRestartTimer) {
@@ -508,7 +503,7 @@
         }
 
         /* ============================================================
-           5. 落子（下三悔一）
+           落子（下三悔一）
            ============================================================ */
         function placeMark(index, player) {
             const myHistory = player === 'X' ? historyX : historyO;
@@ -531,7 +526,7 @@
         }
 
         /* ============================================================
-           6. 结束游戏
+           结束游戏
            ============================================================ */
         function endGame(result) {
             gameOver = true;
@@ -584,7 +579,7 @@
         }
 
         /* ============================================================
-           7. 玩家点击
+           玩家点击
            ============================================================ */
         function handleClick(e) {
             const cell = e.currentTarget;
@@ -654,7 +649,7 @@
         }
 
         /* ============================================================
-           8. AI 落子（Minimax）
+           AI 落子（Minimax）
            ============================================================ */
         function aiMove() {
             if (gameOver) { isAiThinking = false; return; }
@@ -756,7 +751,7 @@
         }
 
         /* ============================================================
-           9. 模式切换
+           模式切换
            ============================================================ */
         function setMode(newMode) {
             mode = newMode;
@@ -784,7 +779,7 @@
         }
 
         /* ============================================================
-           10. 联机：生成房间码
+           联机：生成房间码
            ============================================================ */
         function generateRoomCode() {
             const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -796,7 +791,7 @@
         }
 
         /* ============================================================
-           11. 联机：创建房间
+           联机：创建房间
            ============================================================ */
         function createRoom() {
             if (!firebaseReady) {
@@ -841,7 +836,7 @@
         }
 
         /* ============================================================
-           12. 联机：加入房间
+           联机：加入房间
            ============================================================ */
         function joinRoom(code) {
             if (!firebaseReady) {
@@ -903,7 +898,7 @@
         }
 
         /* ============================================================
-           13. 联机：监听房间
+           联机：监听房间
            ============================================================ */
         function listenToRoom() {
             if (!roomRef) return;
@@ -960,7 +955,7 @@
         }
 
         /* ============================================================
-           14. 联机：离开房间
+           联机：离开房间
            ============================================================ */
         function leaveRoom() {
             if (roomRef) {
@@ -988,7 +983,7 @@
         }
 
         /* ============================================================
-           15. 事件绑定
+           事件绑定
            ============================================================ */
         cells.forEach(cell => cell.addEventListener('click', handleClick));
 
@@ -1051,9 +1046,6 @@
 
         document.getElementById('leaveRoomBtn').addEventListener('click', leaveRoom);
 
-        /* ============================================================
-           16. 启动
-           ============================================================ */
         initGame();
     </script>
 </body>
