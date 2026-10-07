@@ -9,221 +9,108 @@
         body {
             min-height: 100vh;
             background: url('https://img.remit.ee/i/PFoGwVypQ7PA') center/cover no-repeat fixed;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            user-select: none;
-            padding: 10px;
+            display: flex; justify-content: center; align-items: flex-start;
+            user-select: none; padding: 10px;
         }
         .game-container {
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;
-            padding: 14px 14px 18px;
-            border-radius: 24px;
+            display: flex; flex-direction: column; align-items: stretch;
+            padding: 14px 14px 18px; border-radius: 24px;
             background: rgba(0,0,0,0.55);
             border: 1px solid rgba(255,255,255,0.12);
             box-shadow: 0 20px 50px -15px rgba(0,0,0,0.9);
-            max-width: 600px;
-            width: 100%;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            max-width: 600px; width: 100%;
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
         }
         h1 { font-size: 1.3rem; font-weight: 700; letter-spacing: 3px; margin-bottom: 10px; color: #fff; text-align: center; }
-
         .top-panel { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
         .game-switch, .mode-switch, .go-size-switch { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
-        .game-btn { padding: 7px 14px; border-radius: 30px; border: none; font-size: 0.78rem; font-weight: 600; color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); cursor: pointer; transition: all 0.2s; outline: none; }
+        .game-btn { padding: 7px 14px; border-radius: 30px; border: none; font-size: 0.78rem; font-weight: 600; color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); cursor: pointer; outline: none; }
         .game-btn.active { color: #fff; background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.4); }
         .mode-btn { padding: 6px 14px; border-radius: 30px; border: none; font-size: 0.75rem; font-weight: 600; color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; outline: none; }
         .mode-btn.active { color: #fff; background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.35); }
-        .mode-btn.author { color: #ffd700; border-color: rgba(255, 215, 0, 0.4); }
-        .mode-btn.author.active { color: #fff; background: linear-gradient(135deg, #ffb700, #ff6b00); border-color: #ffd700; box-shadow: 0 0 16px rgba(255, 180, 0, 0.6); }
+        .mode-btn.auto-active { color: #fff; background: linear-gradient(135deg, #00c853, #009624); border-color: #00e676; box-shadow: 0 0 16px rgba(0, 200, 100, 0.6); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%,100%{box-shadow:0 0 16px rgba(0,200,100,0.6);} 50%{box-shadow:0 0 28px rgba(0,255,120,0.9);} }
         .settings-btn { color: #a0c8ff; border-color: rgba(160, 200, 255, 0.3); }
         .size-btn { padding: 5px 12px; border-radius: 20px; border: none; font-size: 0.7rem; font-weight: 600; color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; outline: none; }
         .size-btn.active { color: #fff; background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.35); }
-
         .status { font-size: 0.9rem; color: rgba(255,255,255,0.8); letter-spacing: 0.5px; min-height: 22px; text-align: center; }
         .status.win { color: #7ee0a0; font-weight: 600; }
         .status.thinking { color: #8fb8ff; }
         .status.error { color: #ff8f8f; }
         .status.gold { color: #ffd700; font-weight: 600; }
-
         .board-area { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 200px; }
-
         .score-board { display: flex; justify-content: center; gap: 32px; margin-bottom: 10px; font-size: 0.72rem; color: rgba(255,255,255,0.65); letter-spacing: 1px; }
         .score-item { display: flex; flex-direction: column; align-items: center; gap: 2px; }
         .score-item span { font-weight: 700; font-size: 1.3rem; color: #fff; }
         .score-item.black-score span { color: #6cb8ff; }
         .score-item.white-score span { color: #ff8fb0; }
-
         .board-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; width: min(65vw, 260px); margin: 0 auto 14px; }
-        .cell { aspect-ratio: 1/1; border-radius: 16px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); display: flex; justify-content: center; align-items: center; font-size: 2.4rem; font-weight: 700; cursor: pointer; color: transparent; transition: all 0.15s; }
+        .cell { aspect-ratio: 1/1; border-radius: 16px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); display: flex; justify-content: center; align-items: center; font-size: 2.4rem; font-weight: 700; cursor: pointer; color: transparent; }
         .cell:hover:not(.taken):not(.disabled) { background: rgba(255,255,255,0.18); }
         .cell.taken { cursor: default; }
         .cell.disabled { cursor: not-allowed; opacity: 0.7; }
         .cell.x { color: #6cb8ff; }
         .cell.o { color: #ff8fb0; }
         .cell.win { background: rgba(126,224,160,0.25); border-color: rgba(126,224,160,0.6); }
-        .cell.win.x { color: #8affb0; }
-        .cell.win.o { color: #ffb0c8; }
-
+        .cell.win.x { color: #8affb0; } .cell.win.o { color: #ffb0c8; }
         .board-5 { display: grid; grid-template-columns: repeat(15,1fr); gap: 1px; width: min(92vw, 380px); margin: 0 auto 12px; background: #c8a878; border-radius: 6px; padding: 4px; }
         .cell-5 { aspect-ratio: 1/1; background: #d8bc90; display: flex; justify-content: center; align-items: center; cursor: pointer; position: relative; }
         .cell-5::after { content: ''; position: absolute; inset: 0; border: 0.5px solid rgba(80,50,20,0.4); pointer-events: none; }
         .cell-5 .stone { width: 80%; height: 80%; border-radius: 50%; pointer-events: none; }
-        .cell-5 .stone.black { background: radial-gradient(circle at 35% 35%, #555, #000); box-shadow: 0 1px 3px rgba(0,0,0,0.5); }
-        .cell-5 .stone.white { background: radial-gradient(circle at 35% 35%, #fff, #bbb); box-shadow: 0 1px 3px rgba(0,0,0,0.4); }
+        .cell-5 .stone.black { background: radial-gradient(circle at 35% 35%, #555, #000); }
+        .cell-5 .stone.white { background: radial-gradient(circle at 35% 35%, #fff, #bbb); }
         .cell-5.last-move { box-shadow: inset 0 0 0 2px rgba(255,200,0,0.8); }
-
-        /* 跳棋 —— 修复点击 */
         .board-checkers { display: grid; grid-template-columns: repeat(8, 1fr); width: min(88vw, 340px); margin: 0 auto 12px; background: #3a2a1a; border-radius: 8px; padding: 6px; gap: 2px; }
         .cell-check { aspect-ratio: 1/1; display: flex; justify-content: center; align-items: center; position: relative; border-radius: 4px; cursor: pointer; z-index: 1; }
         .cell-check.light { background: #e8d8b0; }
         .cell-check.dark { background: #8b5a2b; }
-        .cell-check.dark:hover { background: #a06a35; }
-        .cell-check .piece { width: 78%; height: 78%; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.4), inset 0 -2px 4px rgba(0,0,0,0.3); pointer-events: none; display: flex; justify-content: center; align-items: center; }
+        .cell-check .piece { width: 78%; height: 78%; border-radius: 50%; pointer-events: none; display: flex; justify-content: center; align-items: center; }
         .cell-check .piece.red { background: radial-gradient(circle at 35% 30%, #ff6b6b, #b30000); }
         .cell-check .piece.black { background: radial-gradient(circle at 35% 30%, #666, #000); }
-        .cell-check .piece.king::after { content: '♛'; position: absolute; color: gold; font-size: 1rem; text-shadow: 0 1px 2px rgba(0,0,0,0.6); }
+        .cell-check .piece.king::after { content: '♛'; position: absolute; color: gold; font-size: 1rem; }
         .cell-check.selected { box-shadow: inset 0 0 0 3px #ffd700; }
         .cell-check.valid-move { box-shadow: inset 0 0 0 3px rgba(126,224,160,0.9); }
         .cell-check.last-move { box-shadow: inset 0 0 0 3px rgba(255,100,100,0.9); }
-
-        .board-go {
-            display: grid;
-            width: min(92vw, 520px);
-            aspect-ratio: 1 / 1;
-            margin: 0 auto 14px;
-            background: #e8c880;
-            border-radius: 8px;
-            padding: 6px;
-            gap: 0;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4), inset 0 0 40px rgba(180, 120, 40, 0.25);
-        }
-        .cell-go { aspect-ratio: 1 / 1; display: flex; justify-content: center; align-items: center; position: relative; cursor: pointer; }
+        .board-go { display: grid; width: min(92vw, 520px); aspect-ratio: 1/1; margin: 0 auto 14px; background: #e8c880; border-radius: 8px; padding: 6px; gap: 0; }
+        .cell-go { aspect-ratio: 1/1; display: flex; justify-content: center; align-items: center; position: relative; cursor: pointer; }
         .cell-go::before { content: ''; position: absolute; inset: 0; border: 0.4px solid rgba(80, 50, 20, 0.5); }
         .cell-go:hover:not(.has-stone) { background: rgba(255, 220, 120, 0.4); }
-        .cell-go .stone { width: 88%; height: 88%; border-radius: 50%; pointer-events: none; position: relative; z-index: 1; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+        .cell-go .stone { width: 88%; height: 88%; border-radius: 50%; pointer-events: none; position: relative; z-index: 1; }
         .cell-go .stone.black { background: radial-gradient(circle at 35% 30%, #444, #000); border: 1px solid rgba(200, 200, 200, 0.5); }
         .cell-go .stone.white { background: radial-gradient(circle at 35% 30%, #fff, #ccc); border: 1px solid rgba(80, 50, 20, 0.6); }
-        .cell-go.last-move .stone { box-shadow: 0 0 0 3px rgba(255, 100, 0, 0.95), 0 2px 5px rgba(0,0,0,0.5); }
-
+        .cell-go.last-move .stone { box-shadow: 0 0 0 3px rgba(255, 100, 0, 0.95); }
         .go-info { display: flex; justify-content: center; gap: 24px; margin-bottom: 12px; font-size: 0.75rem; color: rgba(255,255,255,0.7); }
         .go-info span { font-weight: 700; font-size: 1rem; display: block; margin-top: 2px; color: #fff; }
-
-        .btn { display: inline-block; padding: 9px 24px; border-radius: 40px; border: none; font-size: 0.82rem; font-weight: 600; letter-spacing: 1px; color: #fff; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); cursor: pointer; outline: none; transition: all 0.2s; }
-        .btn:hover { background: rgba(255,255,255,0.2); }
+        .btn { display: inline-block; padding: 9px 24px; border-radius: 40px; border: none; font-size: 0.82rem; font-weight: 600; letter-spacing: 1px; color: #fff; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); cursor: pointer; outline: none; }
         .btn:active { transform: scale(0.96); }
-        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
         .room-panel { display: none; flex-direction: column; gap: 8px; }
         .room-panel.active { display: flex; }
         .room-code-display { font-size: 1.5rem; font-weight: 700; letter-spacing: 6px; color: #fff; padding: 8px; border-radius: 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); cursor: pointer; text-align: center; }
         .room-hint { font-size: 0.7rem; color: rgba(255,255,255,0.55); text-align: center; }
         .room-input { flex: 1; max-width: 170px; padding: 9px 14px; border-radius: 40px; border: none; font-size: 1rem; font-weight: 600; letter-spacing: 4px; text-align: center; color: #fff; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); outline: none; text-transform: uppercase; }
-        .room-input::placeholder { color: rgba(255,255,255,0.35); letter-spacing: 1px; font-weight: 400; }
         .room-actions { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
         .room-input-row { display: flex; gap: 8px; justify-content: center; }
         .hidden { display: none !important; }
-
-        /* 弹窗 */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.75);
-            z-index: 10000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-        }
+        .modal-overlay { display: none; position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.75); z-index: 10000; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(6px); }
         .modal-overlay.active { display: flex !important; }
-        .modal {
-            background: #1a1f2b;
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 24px;
-            padding: 24px 20px;
-            max-width: 380px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 20px 60px -10px rgba(0,0,0,0.9);
-            animation: modalIn 0.3s ease;
-        }
-        @keyframes modalIn {
-            from { transform: scale(0.9); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-        .modal h3 { font-size: 1.15rem; color: #fff; margin-bottom: 6px; letter-spacing: 1px; }
+        .modal { background: #1a1f2b; border: 1px solid rgba(255,255,255,0.15); border-radius: 24px; padding: 24px 20px; max-width: 380px; width: 100%; text-align: center; }
+        .modal h3 { font-size: 1.15rem; color: #fff; margin-bottom: 6px; }
         .modal p { font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-bottom: 14px; }
-        .modal input {
-            width: 100%;
-            padding: 12px 16px;
-            border-radius: 40px;
-            border: 1px solid rgba(255,255,255,0.2);
-            background: rgba(255,255,255,0.08);
-            color: #fff;
-            font-size: 1rem;
-            text-align: center;
-            letter-spacing: 2px;
-            outline: none;
-            margin-bottom: 14px;
-        }
-        .modal input:focus { border-color: #ffd700; }
+        .modal input { width: 100%; padding: 12px 16px; border-radius: 40px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); color: #fff; font-size: 1rem; text-align: center; outline: none; margin-bottom: 14px; }
         .modal .modal-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-        .modal .modal-btns button {
-            padding: 10px 22px;
-            border-radius: 40px;
-            border: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            outline: none;
-            transition: all 0.2s;
-        }
+        .modal .modal-btns button { padding: 10px 22px; border-radius: 40px; border: none; font-size: 0.85rem; font-weight: 600; cursor: pointer; outline: none; }
         .modal .modal-btns .btn-cancel { background: rgba(255,255,255,0.1); color: #fff; }
         .modal .modal-btns .btn-confirm { background: linear-gradient(135deg, #ffb700, #ff6b00); color: #fff; }
-        .modal .modal-btns button:active { transform: scale(0.95); }
-
         .board-area.win-glow { animation: winGlow 1.2s ease-in-out infinite alternate; }
-        @keyframes winGlow {
-            0% { filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.5)); }
-            100% { filter: drop-shadow(0 0 24px rgba(255, 215, 0, 1)); }
-        }
-        .win-text {
-            position: fixed; top: 42%; left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            font-size: 2.8rem; font-weight: 900; letter-spacing: 6px;
-            color: #ffd700;
-            text-shadow: 0 0 20px rgba(255,215,0,0.9), 0 0 40px rgba(255,150,0,0.7);
-            z-index: 9999; pointer-events: none;
-            animation: winPop 1.5s ease forwards;
-        }
-        @keyframes winPop {
-            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-            40% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
-            60% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
-        }
-        .confetti {
-            position: fixed; width: 8px; height: 14px; top: -20px;
-            z-index: 9998; pointer-events: none;
-            animation: confettiFall linear forwards;
-        }
-        @keyframes confettiFall {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(105vh) rotate(720deg); opacity: 0.3; }
-        }
-
+        @keyframes winGlow { 0%{filter:drop-shadow(0 0 8px rgba(255,215,0,0.5));} 100%{filter:drop-shadow(0 0 24px rgba(255,215,0,1));} }
+        .win-text { position: fixed; top: 42%; left: 50%; transform: translate(-50%,-50%) scale(0); font-size: 2.8rem; font-weight: 900; letter-spacing: 6px; color: #ffd700; text-shadow: 0 0 20px rgba(255,215,0,0.9); z-index: 9999; pointer-events: none; animation: winPop 1.5s ease forwards; }
+        @keyframes winPop { 0%{transform:translate(-50%,-50%) scale(0);opacity:0;} 40%{transform:translate(-50%,-50%) scale(1.3);opacity:1;} 60%{transform:translate(-50%,-50%) scale(1);opacity:1;} 100%{transform:translate(-50%,-50%) scale(1);opacity:0;} }
+        .confetti { position: fixed; width: 8px; height: 14px; top: -20px; z-index: 9998; pointer-events: none; animation: confettiFall linear forwards; }
+        @keyframes confettiFall { 0%{transform:translateY(0) rotate(0deg);opacity:1;} 100%{transform:translateY(105vh) rotate(720deg);opacity:0.3;} }
         @media (max-width: 400px) {
             .game-container { padding: 12px 10px 14px; }
             h1 { font-size: 1.1rem; }
             .cell { font-size: 2rem; }
-            .game-btn { padding: 5px 10px; font-size: 0.7rem; }
-            .mode-btn { padding: 5px 10px; font-size: 0.68rem; }
-            .size-btn { padding: 4px 10px; font-size: 0.65rem; }
             .win-text { font-size: 2rem; }
         }
     </style>
@@ -231,7 +118,6 @@
 <body>
     <div class="game-container">
         <h1>棋类游戏</h1>
-
         <div class="top-panel">
             <div class="game-switch" id="gameSwitch">
                 <button class="game-btn active" data-game="ttt">井字棋</button>
@@ -239,20 +125,17 @@
                 <button class="game-btn" data-game="checkers">跳棋</button>
                 <button class="game-btn" data-game="go">围棋</button>
             </div>
-
             <div class="mode-switch" id="modeSwitch">
                 <button class="mode-btn active" data-mode="ai">人机</button>
                 <button class="mode-btn" data-mode="online">联机</button>
-                <button class="mode-btn author hidden" id="authorBtn" data-mode="author">作者</button>
+                <button class="mode-btn hidden" id="autoBtn">🤖 托管关</button>
                 <button class="mode-btn settings-btn" id="settingsBtn">⚙ 设置</button>
             </div>
-
             <div class="go-size-switch hidden" id="goSizeSwitch">
                 <button class="size-btn active" data-size="9">9×9</button>
                 <button class="size-btn" data-size="13">13×13</button>
                 <button class="size-btn" data-size="19">19×19</button>
             </div>
-
             <div class="room-panel" id="roomPanel">
                 <div class="room-actions" id="roomActions">
                     <button class="btn" id="createRoomBtn">创建房间</button>
@@ -263,50 +146,37 @@
                     <button class="btn" id="confirmJoinBtn">加入</button>
                 </div>
                 <div id="roomInfo" class="hidden">
-                    <div class="room-code-display" id="roomCodeDisplay" title="点击复制">------</div>
+                    <div class="room-code-display" id="roomCodeDisplay">------</div>
                     <div class="room-hint" id="roomHint">等待对方加入…</div>
                     <button class="btn" id="leaveRoomBtn" style="margin-top:6px;">离开房间</button>
                 </div>
             </div>
-
             <div class="status" id="status">选择游戏开始</div>
         </div>
-
         <div class="board-area" id="boardArea">
-            <div class="score-board" id="scoreBoard">
+            <div class="score-board">
                 <div class="score-item black-score">黑棋胜<span id="scoreBlack">0</span></div>
                 <div class="score-item white-score">白棋胜<span id="scoreWhite">0</span></div>
             </div>
-
             <div class="board-3" id="board3">
-                <div class="cell" data-index="0"></div>
-                <div class="cell" data-index="1"></div>
-                <div class="cell" data-index="2"></div>
-                <div class="cell" data-index="3"></div>
-                <div class="cell" data-index="4"></div>
-                <div class="cell" data-index="5"></div>
-                <div class="cell" data-index="6"></div>
-                <div class="cell" data-index="7"></div>
-                <div class="cell" data-index="8"></div>
+                <div class="cell" data-index="0"></div><div class="cell" data-index="1"></div><div class="cell" data-index="2"></div>
+                <div class="cell" data-index="3"></div><div class="cell" data-index="4"></div><div class="cell" data-index="5"></div>
+                <div class="cell" data-index="6"></div><div class="cell" data-index="7"></div><div class="cell" data-index="8"></div>
             </div>
-
             <div class="board-5 hidden" id="board5"></div>
             <div class="board-checkers hidden" id="boardCheckers"></div>
             <div class="board-go hidden" id="boardGo"></div>
-
             <div class="go-info hidden" id="goInfo">
                 <div>黑棋提子<span id="blackCapture">0</span></div>
                 <div>白棋提子<span id="whiteCapture">0</span></div>
             </div>
-
             <button class="btn" id="restart" style="margin-top:10px;">重新开始</button>
         </div>
     </div>
-
     <div class="modal-overlay" id="keyModal">
         <div class="modal">
             <h3>🔑 输入卡密</h3>
-            <p>输入正确的卡密以解锁作者功能</p>
+            <p>输入正确的卡密以解锁托管功能</p>
             <input type="password" id="keyInput" placeholder="请输入卡密" autocomplete="off">
             <div class="modal-btns">
                 <button class="btn-cancel" id="keyCancel">取消</button>
@@ -314,22 +184,8 @@
             </div>
         </div>
     </div>
-
-    <div class="modal-overlay" id="authorModal">
-        <div class="modal">
-            <h3>🎮 作者模式</h3>
-            <p>选择 AI 帮你下哪一边</p>
-            <div class="modal-btns">
-                <button class="btn-cancel" id="authorCancel">取消</button>
-                <button class="btn-confirm" id="chooseBlack">AI 执黑</button>
-                <button class="btn-confirm" id="chooseWhite">AI 执白</button>
-            </div>
-        </div>
-    </div>
-
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyBsw0bf6kVPwaU7kyiAgSkXSNvp8ToDJ6E",
@@ -360,9 +216,8 @@
         const boardArea = document.getElementById('boardArea');
         const scoreBlackEl = document.getElementById('scoreBlack');
         const scoreWhiteEl = document.getElementById('scoreWhite');
-        const authorBtn = document.getElementById('authorBtn');
+        const autoBtn = document.getElementById('autoBtn');
         const settingsBtn = document.getElementById('settingsBtn');
-
         const roomPanel = document.getElementById('roomPanel');
         const roomActions = document.getElementById('roomActions');
         const roomInputRow = document.getElementById('roomInputRow');
@@ -370,43 +225,25 @@
         const roomInfo = document.getElementById('roomInfo');
         const roomCodeDisplay = document.getElementById('roomCodeDisplay');
         const roomHint = document.getElementById('roomHint');
-
         const keyModal = document.getElementById('keyModal');
         const keyInput = document.getElementById('keyInput');
-        const authorModal = document.getElementById('authorModal');
 
-        const SECRET_KEY = 'qingshuinb';
+        const SECRET_KEY = 'xingmonb';
         let unlocked = false;
-        let authorSide = 'X';
+        let autoPlay = false;
+        try { if (localStorage.getItem('chessUnlocked') === '1') unlocked = true; } catch(e) {}
 
-        try {
-            if (localStorage.getItem('chessUnlocked') === '1') unlocked = true;
-        } catch(e) {}
-
-        let gameType = 'ttt';
-        let mode = 'ai';
-        let currentPlayer = 'X';
-        let gameOver = false;
-        let isAiThinking = false;
-        let lastMove = -1;
-        let GO_SIZE = 9;
-        let boardGo = [];
-        let goCaptures = { X: 0, O: 0 };
-        let goKoPoint = -1;
-        let board3 = Array(9).fill('');
-        let board5 = Array(225).fill('');
-        let boardCheckers = [];
-        let historyX = [], historyO = [];
-        let scoreBlack = 0;
-        let scoreWhite = 0;
+        let gameType = 'ttt', mode = 'ai', currentPlayer = 'X', gameOver = false, isAiThinking = false, lastMove = -1;
+        let GO_SIZE = 9, boardGo = [], goCaptures = {X:0, O:0}, goKoPoint = -1;
+        let board3 = Array(9).fill(''), board5 = Array(225).fill('');
+        let boardCheckers = [], historyX = [], historyO = [];
+        let scoreBlack = 0, scoreWhite = 0;
         let myRole = null, myRoomCode = null, roomRef = null, roomListener = null, isHost = false;
+        let selectedCheckers = -1, validCheckersTargets = [];
 
         const SIZE_5 = 15;
 
-        function updateStatus(text, cls) {
-            statusEl.textContent = text;
-            statusEl.className = 'status' + (cls ? ' ' + cls : '');
-        }
+        function updateStatus(text, cls) { statusEl.textContent = text; statusEl.className = 'status' + (cls ? ' ' + cls : ''); }
         function showBoard(type) {
             board3El.classList.toggle('hidden', type !== 'ttt');
             board5El.classList.toggle('hidden', type !== 'gomoku');
@@ -415,9 +252,10 @@
             goInfo.classList.toggle('hidden', type !== 'go');
             goSizeSwitch.classList.toggle('hidden', type !== 'go');
         }
-        function updateAuthorBtn() {
-            if (unlocked) authorBtn.classList.remove('hidden');
-            else authorBtn.classList.add('hidden');
+        function updateAutoBtnVisibility() {
+            // 托管按钮只在联机模式 + 已解锁时显示
+            if (unlocked && mode === 'online') autoBtn.classList.remove('hidden');
+            else autoBtn.classList.add('hidden');
         }
         function initCheckersBoard() {
             boardCheckers = Array(64).fill(null);
@@ -455,31 +293,6 @@
             }
             toRemove.forEach(i => b[i] = '');
             return toRemove.length;
-        }
-        function getGoAI(b, aiColor, size) {
-            const me = aiColor;
-            const candidates = [];
-            for (let i = 0; i < size*size; i++) if (b[i] === '') candidates.push(i);
-            if (candidates.length === 0) return -1;
-            let best = -1, bestScore = -Infinity;
-            for (const i of candidates) {
-                if (i === goKoPoint) continue;
-                const testBoard = b.slice();
-                testBoard[i] = me;
-                const { libs } = getGroupAndLibs(testBoard, i, size);
-                if (libs.size === 0) {
-                    const captured = tryCapture(testBoard, me, size);
-                    if (captured === 0) continue;
-                }
-                let score = 0;
-                const cx = i % size, cy = Math.floor(i / size);
-                const center = (size - 1) / 2;
-                const distCenter = Math.abs(cx - center) + Math.abs(cy - center);
-                score -= distCenter * 2;
-                score += Math.random() * 3;
-                if (score > bestScore) { bestScore = score; best = i; }
-            }
-            return best;
         }
         const WIN_3 = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
         function checkWinner3(b) {
@@ -578,7 +391,6 @@
         function initGame(skipNetwork) {
             document.querySelectorAll('.confetti, .win-text').forEach(e => e.remove());
             boardArea.classList.remove('win-glow');
-
             if (gameType === 'ttt') board3 = Array(9).fill('');
             else if (gameType === 'gomoku') board5 = Array(225).fill('');
             else if (gameType === 'checkers') initCheckersBoard();
@@ -596,12 +408,7 @@
             historyX = []; historyO = [];
             selectedCheckers = -1; validCheckersTargets = [];
             renderBoard();
-
             if (mode === 'ai') updateStatus('黑棋（X）先手', '');
-            else if (mode === 'author') {
-                updateStatus(`作者模式 · AI 执${authorSide === 'X' ? '黑' : '白'}`, 'gold');
-                if (authorSide === 'X') setTimeout(authorMove, 400);
-            }
             else if (mode === 'online') {
                 if (myRole) updateStatus(`你是 ${myRole === 'X' ? '黑棋' : '白棋'} · ${currentPlayer === myRole ? '你的回合' : '等待对方…'}`, '');
                 else updateStatus('请创建或加入房间', '');
@@ -609,7 +416,8 @@
             if (roomRef && isHost) syncRoom();
         }
         function playerCanClick(player) {
-            if ((mode === 'author' || (mode === 'online' && roomRef)) && player === authorSide && !gameOver) return false;
+            // 托管中 + 联机 + 轮到我 → 不允许手动点击（AI 会自动下）
+            if (autoPlay && roomRef && myRole === player && !gameOver) return false;
             return true;
         }
         function handleCellClick3(index) {
@@ -646,25 +454,19 @@
             currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
             afterMove();
         }
-        let selectedCheckers = -1, validCheckersTargets = [];
         function handleClickCheckers(index) {
             if (gameOver || isAiThinking) return;
             if (mode === 'online') { if (!myRole || currentPlayer !== myRole) return; }
             if (mode === 'ai' && currentPlayer === 'O') return;
             if (!playerCanClick(currentPlayer)) return;
-
             const p = boardCheckers[index];
             const myColor = currentPlayer === 'X' ? 'black' : 'red';
-
-            // 点击自己的棋子：选中
             if (p && p.color === myColor) {
                 selectedCheckers = index;
                 validCheckersTargets = getCheckersMoves(boardCheckers, index, myColor).map(m => m.to);
                 renderBoard();
                 return;
             }
-
-            // 点击有效目标：移动
             if (selectedCheckers >= 0 && validCheckersTargets.includes(index)) {
                 const moves = getCheckersMoves(boardCheckers, selectedCheckers, myColor);
                 const move = moves.find(m => m.to === index);
@@ -685,11 +487,9 @@
                     boardCheckers[index] = newPiece;
                     lastMove = index;
                     selectedCheckers = -1; validCheckersTargets = [];
-
                     const oppColor = myColor === 'black' ? 'red' : 'black';
                     if (!boardCheckers.some(p => p && p.color === oppColor)) {
-                        renderBoard();
-                        if (roomRef) syncRoom();
+                        renderBoard(); if (roomRef) syncRoom();
                         endGame({ winner: currentPlayer, line: null });
                         return;
                     }
@@ -699,8 +499,6 @@
                     return;
                 }
             }
-
-            // 点击别处：取消选中
             selectedCheckers = -1; validCheckersTargets = [];
             renderBoard();
         }
@@ -715,7 +513,7 @@
             const { libs } = getGroupAndLibs(test, index, GO_SIZE);
             if (libs.size === 0) {
                 const captured = tryCapture(test, player, GO_SIZE);
-                if (captured === 0) { updateStatus('禁入点（无气）', 'error'); return; }
+                if (captured === 0) { updateStatus('禁入点', 'error'); return; }
             } else {
                 const captured = tryCapture(test, player, GO_SIZE);
                 if (captured > 0) {
@@ -723,9 +521,7 @@
                     else { goCaptures.O += captured; whiteCaptureEl.textContent = goCaptures.O; }
                     if (captured === 1) goKoPoint = index;
                     else goKoPoint = -1;
-                } else {
-                    goKoPoint = -1;
-                }
+                } else { goKoPoint = -1; }
             }
             boardGo = test;
             lastMove = index;
@@ -734,174 +530,117 @@
             afterMove();
         }
         function afterMove() {
-            // 联机/作者模式：同步
             if (roomRef) syncRoom();
-
-            // 作者模式：如果是 AI 的回合，自动下
-            if (mode === 'author' && currentPlayer === authorSide && !gameOver) {
+            // 托管：轮到我就自动下（只联机）
+            if (autoPlay && roomRef && myRole && currentPlayer === myRole && !gameOver && !isAiThinking) {
                 isAiThinking = true;
-                updateStatus(`作者 AI 执${authorSide === 'X' ? '黑' : '白'}思考中…`, 'thinking');
-                setTimeout(authorMove, 400);
+                updateStatus('🤖 托管中…', 'thinking');
+                setTimeout(() => aiAutoMove(myRole), 400);
                 return;
             }
-            // 联机模式（普通玩家）
             if (mode === 'online') {
                 updateStatus(currentPlayer === myRole ? '你的回合' : '等待对方…', '');
                 return;
             }
-            // 单机人机
+            // 人机模式
             if (mode === 'ai' && currentPlayer === 'O') {
                 isAiThinking = true;
                 updateStatus('AI 思考中…', 'thinking');
-                setTimeout(aiMove, 250);
+                setTimeout(() => aiAutoMove('O'), 250);
             } else {
                 const name = currentPlayer === 'X' ? '黑棋' : '白棋';
                 updateStatus(`轮到 ${name}`, '');
             }
         }
-        function aiMove() {
+        // ★ AI 自动下某一方
+        function aiAutoMove(me) {
             if (gameOver) { isAiThinking = false; return; }
             let move = -1;
-            if (gameType === 'ttt') {
-                move = getBestTTT(board3);
-                if (move !== -1) { doMove3(move); isAiThinking = false; return; }
-            } else if (gameType === 'gomoku') {
-                move = getBestGomoku(board5);
-                if (move !== -1) {
-                    board5[move] = 'O';
-                    lastMove = move;
-                    const r = checkWinner5(board5);
-                    renderBoard();
-                    if (r) { isAiThinking = false; endGame(r); return; }
-                    currentPlayer = 'X';
-                }
-            } else if (gameType === 'checkers') {
-                const m = getCheckersAI(boardCheckers, 'red');
-                if (m) {
-                    const piece = boardCheckers[m.from];
-                    boardCheckers[m.from] = null;
-                    if (m.capture) {
-                        const mx = (m.from % 8 + m.to % 8) / 2;
-                        const my = (Math.floor(m.from / 8) + Math.floor(m.to / 8)) / 2;
-                        boardCheckers[my*8+mx] = null;
-                    }
-                    const ny = Math.floor(m.to / 8);
-                    let np = { color: piece.color, king: piece.king };
-                    if (!piece.king) {
-                        if (piece.color === 'red' && ny === 0) np.king = true;
-                    }
-                    boardCheckers[m.to] = np;
-                    lastMove = m.to;
-                    renderBoard();
-                    if (!boardCheckers.some(p => p && p.color === 'black')) {
-                        isAiThinking = false; endGame({ winner: 'O', line: null }); return;
-                    }
-                    currentPlayer = 'X';
-                }
-            } else if (gameType === 'go') {
-                move = getGoAI(boardGo, 'O', GO_SIZE);
-                if (move >= 0) {
-                    boardGo[move] = 'O';
-                    const cap = tryCapture(boardGo, 'O', GO_SIZE);
-                    if (cap > 0) { goCaptures.O += cap; whiteCaptureEl.textContent = goCaptures.O; }
-                    lastMove = move;
-                    renderBoard();
-                    currentPlayer = 'X';
-                }
-            }
-            isAiThinking = false;
-            updateStatus('轮到 黑棋', '');
-        }
-
-        /* ===== 作者 AI ===== */
-        function authorMove() {
-            if (gameOver) { isAiThinking = false; return; }
-            const me = authorSide;
-            let move = -1;
+            const opp = me === 'X' ? 'O' : 'X';
 
             if (gameType === 'ttt') {
-                move = authorBestTTT(board3, me);
-                if (move !== -1) {
-                    isAiThinking = false;
-                    const myHist = me === 'X' ? historyX : historyO;
-                    if (myHist.length >= 3) { const old = myHist.shift(); board3[old] = ''; }
-                    board3[move] = me;
-                    myHist.push(move);
-                    lastMove = move;
-                    const r = checkWinner3(board3);
-                    renderBoard();
-                    if (roomRef) syncRoom();
-                    if (r) { endGame(r); return; }
-                    currentPlayer = me === 'X' ? 'O' : 'X';
-                    updateStatus(mode === 'online' ? '等待对方…' : `轮到 ${currentPlayer === 'X' ? '黑棋（你）' : '白棋（你）'}`, '');
-                    return;
-                }
+                move = aiBestTTT(board3, me);
+                if (move === -1) { isAiThinking = false; return; }
+                const myHist = me === 'X' ? historyX : historyO;
+                if (myHist.length >= 3) { const old = myHist.shift(); board3[old] = ''; }
+                board3[move] = me;
+                myHist.push(move);
+                lastMove = move;
+                const r = checkWinner3(board3);
+                renderBoard();
+                if (r) { isAiThinking = false; if (roomRef) syncRoom(); endGame(r); return; }
+                currentPlayer = opp;
+                isAiThinking = false;
+                if (roomRef) syncRoom();
+                updateStatus(mode === 'online' ? '等待对方…' : `轮到 ${opp === 'X' ? '黑棋' : '白棋'}`, '');
+                return;
             } else if (gameType === 'gomoku') {
-                move = authorBestGomoku(board5, me);
-                if (move !== -1) {
-                    isAiThinking = false;
-                    board5[move] = me;
-                    lastMove = move;
-                    const r = checkWinner5(board5);
-                    renderBoard();
-                    if (roomRef) syncRoom();
-                    if (r) { endGame(r); return; }
-                    currentPlayer = me === 'X' ? 'O' : 'X';
-                    updateStatus(mode === 'online' ? '等待对方…' : `轮到 ${currentPlayer === 'X' ? '黑棋（你）' : '白棋（你）'}`, '');
-                    return;
-                }
+                move = aiBestGomoku(board5, me);
+                if (move === -1) { isAiThinking = false; return; }
+                board5[move] = me;
+                lastMove = move;
+                const r = checkWinner5(board5);
+                renderBoard();
+                if (r) { isAiThinking = false; if (roomRef) syncRoom(); endGame(r); return; }
+                currentPlayer = opp;
+                isAiThinking = false;
+                if (roomRef) syncRoom();
+                updateStatus(mode === 'online' ? '等待对方…' : `轮到 ${opp === 'X' ? '黑棋' : '白棋'}`, '');
+                return;
             } else if (gameType === 'checkers') {
                 const color = me === 'X' ? 'black' : 'red';
-                move = authorBestCheckers(boardCheckers, color);
-                if (move) {
+                move = aiBestCheckers(boardCheckers, color);
+                if (!move) { isAiThinking = false; return; }
+                const piece = boardCheckers[move.from];
+                boardCheckers[move.from] = null;
+                if (move.capture) {
+                    const mx = (move.from % 8 + move.to % 8) / 2;
+                    const my = (Math.floor(move.from / 8) + Math.floor(move.to / 8)) / 2;
+                    boardCheckers[my*8+mx] = null;
+                }
+                const ny = Math.floor(move.to / 8);
+                let np = { color: piece.color, king: piece.king };
+                if (!piece.king) {
+                    if (piece.color === 'red' && ny === 0) np.king = true;
+                    if (piece.color === 'black' && ny === 7) np.king = true;
+                }
+                boardCheckers[move.to] = np;
+                lastMove = move.to;
+                renderBoard();
+                const oppColor = color === 'black' ? 'red' : 'black';
+                if (!boardCheckers.some(p => p && p.color === oppColor)) {
                     isAiThinking = false;
-                    const piece = boardCheckers[move.from];
-                    boardCheckers[move.from] = null;
-                    if (move.capture) {
-                        const mx = (move.from % 8 + move.to % 8) / 2;
-                        const my = (Math.floor(move.from / 8) + Math.floor(move.to / 8)) / 2;
-                        boardCheckers[my*8+mx] = null;
-                    }
-                    const ny = Math.floor(move.to / 8);
-                    let np = { color: piece.color, king: piece.king };
-                    if (!piece.king) {
-                        if (piece.color === 'red' && ny === 0) np.king = true;
-                        if (piece.color === 'black' && ny === 7) np.king = true;
-                    }
-                    boardCheckers[move.to] = np;
-                    lastMove = move.to;
-                    renderBoard();
                     if (roomRef) syncRoom();
-                    const oppColor = color === 'black' ? 'red' : 'black';
-                    if (!boardCheckers.some(p => p && p.color === oppColor)) {
-                        endGame({ winner: me, line: null }); return;
-                    }
-                    currentPlayer = me === 'X' ? 'O' : 'X';
-                    updateStatus(mode === 'online' ? '等待对方…' : `轮到 ${currentPlayer === 'X' ? '黑棋（你）' : '白棋（你）'}`, '');
+                    endGame({ winner: me, line: null });
                     return;
                 }
+                currentPlayer = opp;
+                isAiThinking = false;
+                if (roomRef) syncRoom();
+                updateStatus(mode === 'online' ? '等待对方…' : `轮到 ${opp === 'X' ? '黑棋' : '白棋'}`, '');
+                return;
             } else if (gameType === 'go') {
-                move = authorBestGo(boardGo, me, GO_SIZE);
-                if (move >= 0) {
-                    isAiThinking = false;
-                    boardGo[move] = me;
-                    const cap = tryCapture(boardGo, me, GO_SIZE);
-                    if (cap > 0) {
-                        if (me === 'X') { goCaptures.X += cap; blackCaptureEl.textContent = goCaptures.X; }
-                        else { goCaptures.O += cap; whiteCaptureEl.textContent = goCaptures.O; }
-                    }
-                    lastMove = move;
-                    renderBoard();
-                    if (roomRef) syncRoom();
-                    currentPlayer = me === 'X' ? 'O' : 'X';
-                    updateStatus(mode === 'online' ? '等待对方…' : `轮到 ${currentPlayer === 'X' ? '黑棋（你）' : '白棋（你）'}`, '');
-                    return;
+                move = aiBestGo(boardGo, me, GO_SIZE);
+                if (move < 0) { isAiThinking = false; return; }
+                boardGo[move] = me;
+                const cap = tryCapture(boardGo, me, GO_SIZE);
+                if (cap > 0) {
+                    if (me === 'X') { goCaptures.X += cap; blackCaptureEl.textContent = goCaptures.X; }
+                    else { goCaptures.O += cap; whiteCaptureEl.textContent = goCaptures.O; }
                 }
+                lastMove = move;
+                renderBoard();
+                currentPlayer = opp;
+                isAiThinking = false;
+                if (roomRef) syncRoom();
+                updateStatus(mode === 'online' ? '等待对方…' : `轮到 ${opp === 'X' ? '黑棋' : '白棋'}`, '');
+                return;
             }
             isAiThinking = false;
         }
 
-        function authorBestTTT(b, me) {
+        // ===== AI 算法 =====
+        function aiBestTTT(b, me) {
             const opp = me === 'X' ? 'O' : 'X';
             if (b.every(v => v === '')) return 4;
             let bestScore = -Infinity, bestMove = -1;
@@ -938,7 +677,7 @@
                 return best;
             }
         }
-        function authorBestGomoku(b, me) {
+        function aiBestGomoku(b, me) {
             const opp = me === 'X' ? 'O' : 'X';
             const n = SIZE_5;
             for (let i = 0; i < n*n; i++) {
@@ -961,18 +700,17 @@
                 const sc = scorePosQuick(b, c, me) * 1.1 + scorePosQuick(b, c, opp);
                 return sc - sa;
             });
-            const limit = stoneCount < 4 ? 20 : 14;
-            const top = candidates.slice(0, limit);
+            const top = candidates.slice(0, stoneCount < 4 ? 20 : 14);
             let bestMove = top[0], bestScore = -Infinity;
             for (const i of top) {
                 b[i] = me;
-                const s = authorMinimax5(b, depth - 1, -Infinity, Infinity, false, me, opp);
+                const s = aiMinimax5(b, depth - 1, -Infinity, Infinity, false, me, opp);
                 b[i] = '';
                 if (s > bestScore) { bestScore = s; bestMove = i; }
             }
             return bestMove;
         }
-        function authorMinimax5(b, depth, alpha, beta, isMax, me, opp) {
+        function aiMinimax5(b, depth, alpha, beta, isMax, me, opp) {
             const win = checkWinner5(b);
             if (win) {
                 if (win.winner === me) return 100000000 - (10 - depth) * 10000;
@@ -992,10 +730,9 @@
                 let best = -Infinity;
                 for (const i of candidates) {
                     b[i] = me;
-                    const s = authorMinimax5(b, depth - 1, alpha, beta, false, me, opp);
+                    const s = aiMinimax5(b, depth - 1, alpha, beta, false, me, opp);
                     b[i] = '';
-                    best = Math.max(best, s);
-                    alpha = Math.max(alpha, s);
+                    best = Math.max(best, s); alpha = Math.max(alpha, s);
                     if (beta <= alpha) break;
                 }
                 return best;
@@ -1003,21 +740,18 @@
                 let best = Infinity;
                 for (const i of candidates) {
                     b[i] = opp;
-                    const s = authorMinimax5(b, depth - 1, alpha, beta, true, me, opp);
+                    const s = aiMinimax5(b, depth - 1, alpha, beta, true, me, opp);
                     b[i] = '';
-                    best = Math.min(best, s);
-                    beta = Math.min(beta, s);
+                    best = Math.min(best, s); beta = Math.min(beta, s);
                     if (beta <= alpha) break;
                 }
                 return best;
             }
         }
-        function authorBestCheckers(b, color) {
+        function aiBestCheckers(b, color) {
             const allMoves = [];
             for (let i = 0; i < 64; i++) {
-                if (b[i] && b[i].color === color) {
-                    allMoves.push(...getCheckersMoves(b, i, color));
-                }
+                if (b[i] && b[i].color === color) allMoves.push(...getCheckersMoves(b, i, color));
             }
             if (allMoves.length === 0) return null;
             const captures = allMoves.filter(m => m.capture);
@@ -1053,13 +787,11 @@
                     const y = Math.floor(i / 8);
                     if (p.color === 'black') score += y * 0.3;
                     else score += (7 - y) * 0.3;
-                } else {
-                    score -= val;
-                }
+                } else score -= val;
             }
             return score;
         }
-        function authorBestGo(b, me, size) {
+        function aiBestGo(b, me, size) {
             const candidates = [];
             for (let i = 0; i < size*size; i++) if (b[i] === '') candidates.push(i);
             if (candidates.length === 0) return -1;
@@ -1072,28 +804,13 @@
                     if (libs.size > 0) return i;
                 }
             }
-            const n = size;
-            const center = Math.floor(n / 2);
+            const n = size, center = Math.floor(n / 2);
             const starPts = [
-                center * n + center,
-                (center - 2) * n + (center - 2),
-                (center - 2) * n + (center + 2),
-                (center + 2) * n + (center - 2),
-                (center + 2) * n + (center + 2)
+                center*n+center, (center-2)*n+(center-2), (center-2)*n+(center+2),
+                (center+2)*n+(center-2), (center+2)*n+(center+2)
             ];
-            for (const sp of starPts) {
-                if (sp >= 0 && sp < n*n && b[sp] === '') return sp;
-            }
+            for (const sp of starPts) if (sp >= 0 && sp < n*n && b[sp] === '') return sp;
             return candidates[Math.floor(Math.random() * candidates.length)];
-        }
-        function getBestTTT(b) {
-            for (let i = 0; i < 9; i++) { if (b[i] === '') { const nb = b.slice(); nb[i] = 'O'; if (checkWinner3(nb)?.winner === 'O') return i; } }
-            for (let i = 0; i < 9; i++) { if (b[i] === '') { const nb = b.slice(); nb[i] = 'X'; if (checkWinner3(nb)?.winner === 'X') return i; } }
-            if (b[4] === '') return 4;
-            const corners = [0,2,6,8].filter(i => b[i] === '');
-            if (corners.length) return corners[Math.floor(Math.random()*corners.length)];
-            const empty = b.map((v,i) => v === '' ? i : -1).filter(i => i >= 0);
-            return empty.length ? empty[Math.floor(Math.random()*empty.length)] : -1;
         }
         const GOMOKU_SHAPE = { FIVE: 1000000, OPEN_FOUR: 100000, FOUR: 10000, OPEN_THREE: 8000, THREE: 1000, OPEN_TWO: 800, TWO: 100, ONE: 10 };
         function shapeScore(count, openEnds) {
@@ -1177,72 +894,6 @@
             }
             return total;
         }
-        function minimaxGomoku(b, depth, alpha, beta, isMax) {
-            const win = checkWinner5(b);
-            if (win) {
-                if (win.winner === 'O') return 10000000 - (10 - depth) * 1000;
-                if (win.winner === 'X') return -10000000 + (10 - depth) * 1000;
-            }
-            if (depth === 0) return evaluateBoard(b, 'O') - evaluateBoard(b, 'X') * 1.2;
-            let candidates = getCandidates(b);
-            if (candidates.length > 12) {
-                candidates.sort((a, c) => {
-                    const sa = scorePosQuick(b, a, 'O') + scorePosQuick(b, a, 'X') * 0.9;
-                    const sc = scorePosQuick(b, c, 'O') + scorePosQuick(b, c, 'X') * 0.9;
-                    return sc - sa;
-                });
-                candidates.length = 12;
-            }
-            if (isMax) {
-                let maxEval = -Infinity;
-                for (const i of candidates) {
-                    b[i] = 'O';
-                    const ev = minimaxGomoku(b, depth-1, alpha, beta, false);
-                    b[i] = '';
-                    maxEval = Math.max(maxEval, ev);
-                    alpha = Math.max(alpha, ev);
-                    if (beta <= alpha) break;
-                }
-                return maxEval;
-            } else {
-                let minEval = Infinity;
-                for (const i of candidates) {
-                    b[i] = 'X';
-                    const ev = minimaxGomoku(b, depth-1, alpha, beta, true);
-                    b[i] = '';
-                    minEval = Math.min(minEval, ev);
-                    beta = Math.min(beta, ev);
-                    if (beta <= alpha) break;
-                }
-                return minEval;
-            }
-        }
-        function getBestGomoku(b) {
-            const n = SIZE_5;
-            for (let i = 0; i < n*n; i++) {
-                if (b[i] !== '') continue;
-                b[i] = 'O'; const w = checkWinner5(b); b[i] = '';
-                if (w?.winner === 'O') return i;
-            }
-            for (let i = 0; i < n*n; i++) {
-                if (b[i] !== '') continue;
-                b[i] = 'X'; const w = checkWinner5(b); b[i] = '';
-                if (w?.winner === 'X') return i;
-            }
-            const stoneCount = b.filter(v => v !== '').length;
-            let depth = 3;
-            if (stoneCount < 6) depth = 4;
-            if (stoneCount < 3) depth = 5;
-            const candidates = getCandidates(b);
-            let bestMove = candidates[0], bestScore = -Infinity;
-            for (const i of candidates) {
-                b[i] = 'O';
-                const s = minimaxGomoku(b, depth-1, -Infinity, Infinity, false);
-                b[i] = '';
-                if (s > bestScore) { bestScore = s; bestMove = i; }
-            }
-            return bestMove;
-        }
         function getCheckersMoves(b, index, playerColor) {
             const x = index % 8, y = Math.floor(index / 8);
             const piece = b[index];
@@ -1276,29 +927,17 @@
             findJumps(x, y, b, new Set(), []);
             return [...moves, ...jumps];
         }
-        function getCheckersAI(b, aiColor) {
-            const moves = [];
-            for (let i = 0; i < 64; i++) if (b[i] && b[i].color === aiColor) moves.push(...getCheckersMoves(b, i, aiColor));
-            if (moves.length === 0) return null;
-            const captures = moves.filter(m => m.capture);
-            if (captures.length) return captures[0];
-            return moves[Math.floor(Math.random() * moves.length)];
-        }
         function endGame(result) {
             gameOver = true;
-            if (result.winner === 'draw') {
-                updateStatus('平局！', 'win');
-            } else {
+            if (result.winner === 'draw') updateStatus('平局！', 'win');
+            else {
                 let name;
-                if (mode === 'author') name = result.winner === authorSide ? 'AI' : '你';
+                if (mode === 'online') name = result.winner === myRole ? '你' : '对方';
                 else if (mode === 'ai' && result.winner === 'O') name = 'AI';
-                else if (mode === 'online') name = result.winner === myRole ? '你' : '对方';
                 else name = result.winner === 'X' ? '黑棋' : '白棋';
                 updateStatus(`${name} 获胜！`, 'win');
-
                 if (result.winner === 'X') { scoreBlack++; scoreBlackEl.textContent = scoreBlack; }
                 else { scoreWhite++; scoreWhiteEl.textContent = scoreWhite; }
-
                 playWinAnimation();
             }
             renderBoard();
@@ -1306,7 +945,6 @@
             if (mode !== 'online' || isHost) {
                 setTimeout(() => {
                     if (mode === 'online') resetRoom();
-                    else if (mode === 'author') initGame();
                     else initGame();
                 }, 2200);
             }
@@ -1340,30 +978,17 @@
             else initGame(true);
         }
         function setMode(newMode) {
-            if (newMode === 'author' && !unlocked) {
-                updateStatus('请先输入卡密解锁', 'error');
-                return;
-            }
             mode = newMode;
             modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
             roomPanel.classList.toggle('active', mode === 'online');
-
-            // 只有明确切到非联机、非作者时才离开房间
-            if (mode !== 'online' && mode !== 'author' && roomRef) leaveRoom();
-
+            updateAutoBtnVisibility();
+            if (mode !== 'online' && roomRef) leaveRoom();
             if (mode === 'online') {
                 roomActions.style.display = 'flex';
                 roomInputRow.classList.add('hidden');
                 roomInfo.classList.add('hidden');
                 updateStatus(firebaseReady ? '请创建或加入房间' : '联机需要 Firebase', firebaseReady ? '' : 'error');
-            } else if (mode === 'author') {
-                // 作者模式：保留联机连接（如果有），弹出选边
-                setTimeout(() => {
-                    authorModal.classList.add('active');
-                }, 50);
-            } else {
-                initGame();
-            }
+            } else initGame();
         }
         function setGoSize(size) {
             GO_SIZE = size;
@@ -1383,16 +1008,9 @@
             return b;
         }
         function getGameState() {
-            return {
-                gameType, GO_SIZE, board3, board5, boardCheckers, boardGo,
-                currentPlayer, gameOver, lastMove, historyX, historyO,
-                goCaptures, goKoPoint, scoreBlack, scoreWhite
-            };
+            return { gameType, GO_SIZE, board3, board5, boardCheckers, boardGo, currentPlayer, gameOver, lastMove, historyX, historyO, goCaptures, goKoPoint, scoreBlack, scoreWhite };
         }
-        function syncRoom() {
-            if (!roomRef) return;
-            roomRef.update({ ...getGameState(), lastUpdate: Date.now() });
-        }
+        function syncRoom() { if (roomRef) roomRef.update({ ...getGameState(), lastUpdate: Date.now() }); }
         function resetRoom() {
             if (!roomRef) return;
             roomRef.update({
@@ -1484,7 +1102,13 @@
                 if (d.historyO) historyO = d.historyO;
                 renderBoard();
                 if (gameOver) updateStatus('游戏结束', 'win');
-                else updateStatus(currentPlayer === myRole ? '你的回合' : '等待对方…', '');
+                else if (autoPlay && myRole === currentPlayer && !isAiThinking) {
+                    isAiThinking = true;
+                    updateStatus('🤖 托管中…', 'thinking');
+                    setTimeout(() => aiAutoMove(myRole), 400);
+                } else {
+                    updateStatus(currentPlayer === myRole ? '你的回合' : '等待对方…', '');
+                }
                 if (d.players && isHost && d.players.O) roomHint.textContent = '对方已加入 · 开始对战';
             });
         }
@@ -1501,15 +1125,13 @@
             updateStatus('已离开房间', '');
         }
 
-        // ===== 事件 =====
         cells3.forEach(cell => cell.addEventListener('click', () => handleCellClick3(parseInt(cell.dataset.index, 10))));
         gameBtns.forEach(btn => btn.addEventListener('click', () => setGame(btn.dataset.game)));
         modeBtns.forEach(btn => btn.addEventListener('click', () => setMode(btn.dataset.mode)));
         sizeBtns.forEach(btn => btn.addEventListener('click', () => setGoSize(parseInt(btn.dataset.size, 10))));
         restartBtn.addEventListener('click', () => {
-            if (mode === 'online' || (mode === 'author' && roomRef)) {
-                if (isHost && roomRef) resetRoom();
-            } else initGame();
+            if (mode === 'online' && isHost && roomRef) resetRoom();
+            else initGame();
         });
         document.getElementById('createRoomBtn').addEventListener('click', createRoom);
         document.getElementById('joinRoomBtn').addEventListener('click', () => {
@@ -1522,14 +1144,38 @@
         roomCodeInput.addEventListener('keydown', e => { if (e.key === 'Enter') joinRoom(roomCodeInput.value); });
         roomCodeDisplay.addEventListener('click', () => { if (myRoomCode) navigator.clipboard.writeText(myRoomCode).catch(()=>{}); });
 
+        autoBtn.addEventListener('click', () => {
+            if (!unlocked) return;
+            if (!roomRef) {
+                updateStatus('请先进入联机房间再开启托管', 'error');
+                return;
+            }
+            autoPlay = !autoPlay;
+            if (autoPlay) {
+                autoBtn.textContent = '🤖 托管中';
+                autoBtn.classList.add('auto-active');
+                updateStatus('🤖 托管开启 · AI 自动帮你下', 'gold');
+                // 如果现在轮到我，立刻下
+                if (myRole && currentPlayer === myRole && !gameOver && !isAiThinking) {
+                    isAiThinking = true;
+                    setTimeout(() => aiAutoMove(myRole), 400);
+                }
+            } else {
+                autoBtn.textContent = '🤖 托管关';
+                autoBtn.classList.remove('auto-active');
+                updateStatus('托管已关 · 轮到你自己下', '');
+            }
+        });
+
         settingsBtn.addEventListener('click', () => {
             if (unlocked) {
-                if (confirm('已解锁作者模式，是否锁定？')) {
-                    unlocked = false;
+                if (confirm('已解锁，是否锁定？')) {
+                    unlocked = false; autoPlay = false;
                     try { localStorage.removeItem('chessUnlocked'); } catch(e) {}
-                    updateAuthorBtn();
-                    if (mode === 'author') setMode('ai');
-                    updateStatus('已锁定作者模式', '');
+                    updateAutoBtnVisibility();
+                    autoBtn.textContent = '🤖 托管关';
+                    autoBtn.classList.remove('auto-active');
+                    updateStatus('已锁定', '');
                 }
                 return;
             }
@@ -1537,75 +1183,20 @@
             keyModal.classList.add('active');
             setTimeout(() => keyInput.focus(), 100);
         });
-        document.getElementById('keyCancel').addEventListener('click', () => {
-            keyModal.classList.remove('active');
-        });
+        document.getElementById('keyCancel').addEventListener('click', () => keyModal.classList.remove('active'));
         document.getElementById('keyConfirm').addEventListener('click', () => {
             const v = keyInput.value.trim();
             if (v === SECRET_KEY) {
                 unlocked = true;
                 try { localStorage.setItem('chessUnlocked', '1'); } catch(e) {}
-                updateAuthorBtn();
+                updateAutoBtnVisibility();
                 keyModal.classList.remove('active');
-                updateStatus('✓ 卡密正确，作者模式已解锁', 'gold');
-            } else {
-                updateStatus('卡密错误', 'error');
-            }
+                updateStatus('✓ 卡密正确，托管功能已解锁', 'gold');
+            } else updateStatus('卡密错误', 'error');
         });
-        keyInput.addEventListener('keydown', e => {
-            if (e.key === 'Enter') document.getElementById('keyConfirm').click();
-        });
+        keyInput.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('keyConfirm').click(); });
 
-        document.getElementById('authorCancel').addEventListener('click', () => {
-            authorModal.classList.remove('active');
-            if (roomRef) {
-                // 从联机切回联机
-                mode = 'online';
-                modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === 'online'));
-                roomPanel.classList.add('active');
-                updateStatus(currentPlayer === myRole ? '你的回合' : '等待对方…', '');
-            } else {
-                mode = 'ai';
-                modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === 'ai'));
-                initGame();
-            }
-        });
-        document.getElementById('chooseBlack').addEventListener('click', () => {
-            authorModal.classList.remove('active');
-            if (roomRef && myRole) {
-                // 联机：只能帮自己颜色
-                authorSide = myRole;
-                mode = 'author';
-                updateStatus(`联机 · AI 帮你执${authorSide === 'X' ? '黑' : '白'}`, 'gold');
-                if (currentPlayer === authorSide && !gameOver) {
-                    isAiThinking = true;
-                    setTimeout(authorMove, 400);
-                }
-            } else {
-                authorSide = 'X';
-                initGame();
-                updateStatus('作者模式 · AI 执黑，你执白', 'gold');
-            }
-        });
-        document.getElementById('chooseWhite').addEventListener('click', () => {
-            authorModal.classList.remove('active');
-            if (roomRef && myRole) {
-                authorSide = myRole;
-                mode = 'author';
-                updateStatus(`联机 · AI 帮你执${authorSide === 'X' ? '黑' : '白'}`, 'gold');
-                if (currentPlayer === authorSide && !gameOver) {
-                    isAiThinking = true;
-                    setTimeout(authorMove, 400);
-                }
-            } else {
-                authorSide = 'O';
-                initGame();
-                updateStatus('作者模式 · AI 执白，你执黑', 'gold');
-            }
-        });
-
-        // 启动
-        updateAuthorBtn();
+        updateAutoBtnVisibility();
         showBoard(gameType);
         initGame();
     </script>
